@@ -7,6 +7,7 @@ class ATM
     {
         this.id = id_ingresado;
         this.balance = balance_ingresado;
+        //Prueba repositorio
     }
 
   //properties en c#
