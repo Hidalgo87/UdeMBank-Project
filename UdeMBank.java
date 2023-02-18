@@ -12,8 +12,8 @@ class Bank
         define_elements();
     }
     public void Run(Bank bank){
-    bank.welcome();
-    int respuesta = bank.input_option();
+    bank.menu();//Llamamos al metodo Menu que imprime un mensaje de bienvenida y las diferentes opciones
+    int respuesta = bank.input_option();//Guardamos el retorno del llamado al metodo input opcion que le pide una opcion al usuario
     if (respuesta == 1)
     {
       int id_cliente = bank.request_id();
@@ -23,10 +23,14 @@ class Bank
     }
   }
     //Menu de bienvenida
-    public void welcome()
+    public void menu()
     {
-        System.out.println("Bienvenido, aquí están las opciones");
+        System.out.println("Bienvenido al banco UdeM, aquí están las opciones");
         System.out.println("1. Retirar dinero");
+        System.out.println("2. Retirar dinero via sucursal virtual");
+        System.out.println("3. Depositar desde un ATM");
+        System.out.println("4. Depositar dinero via sucursal virtual");
+        System.out.println("5. Transferir dinero a otro cliente");
     }
 
     //Ingreso de la opcion del usuario, 1 para retirar dinero
