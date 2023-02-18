@@ -26,7 +26,7 @@ class Bank
     public void menu()
     {
         System.out.println("Bienvenido al banco UdeM, aquí están las opciones");
-        System.out.println("1. Retirar dinero");
+        System.out.println("1. Retirar dinero desde un ATM");
         System.out.println("2. Retirar dinero via sucursal virtual");
         System.out.println("3. Depositar desde un ATM");
         System.out.println("4. Depositar dinero via sucursal virtual");
