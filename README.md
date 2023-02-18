@@ -1,6 +1,7 @@
 # UdeMBank-Project
 
 Tareas a realizar actualmente:
+
 Organizar los metodos de la clase UdeMBank de manera jerarquica, de arriba hacia abajo.
 
 Definir correctamente las excepciones para cuando se ingresan valores erroneos en el programa.
