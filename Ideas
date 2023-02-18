@@ -1,0 +1,5 @@
+CLASE USER:
+Esta clase será la clase padre de las clases Client_Regular y Client_Platinum y además la clase Admin, estas clases heredarán los atributos de id, contraseña y balance de la clase de User y ahora será
+desde estas clases donde instanciaremos los objetos de clientes como su tipo de dato respectivo y los objetos de tipo Admin
+
+
