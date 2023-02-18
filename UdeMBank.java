@@ -11,6 +11,17 @@ class Bank
     {
         define_elements();
     }
+    public void Run(Bank bank){
+    bank.welcome();
+    int respuesta = bank.input_option();
+    if (respuesta == 1)
+    {
+      int id_cliente = bank.request_id();
+      bank.saldo_atm();
+      bank.saldo_cliente(id_cliente);
+      bank.retirar_dinero(id_cliente);
+    }
+  }
     //Menu de bienvenida
     public void welcome()
     {

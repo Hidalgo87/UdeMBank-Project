@@ -40,7 +40,7 @@ public class Client
       int nuevo_balance;
       nuevo_balance = balance - wd_amount;
       update_balance(nuevo_balance);    
-      System.out.println("Se realizó el retiro con exito ✔");
+      System.out.println("Se realizó el retiro con exito");
       System.out.println("Nuevo saldo: " +this.balance);
   }
 
