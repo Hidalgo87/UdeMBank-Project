@@ -7,7 +7,7 @@ class ATM
     {
         this.id = id_ingresado;
         this.balance = balance_ingresado;
-        //Prueba repositorio por mi
+        //Probando commit desde Arch Linux
     }
 
   //properties en c#
