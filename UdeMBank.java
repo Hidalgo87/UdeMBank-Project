@@ -1,6 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
+//import java.util.InputMismatchException;
 import java.util.List;
 class Bank
 {
@@ -10,42 +10,24 @@ class Bank
     public Bank()
     {
         define_elements();
-        System.out.println(client_list.get(1).getClass());
-        System.out.println(client_list.get(1).get_id());
-        System.out.println(client_list.get(1).get_balance());
     }
     public void Run(Bank bank){
-    bank.menu_cliente();//Llamamos al metodo Menu que imprime un mensaje de bienvenida y las diferentes opciones
+    int id_ingresada = bank.request_id();
+    String password_ingresada = request_password();
+    if(id_ingresada == 0 && password_ingresada.equals("admin123")){ //La comparacion debe hacerse con el id y contraseña del admin que está almacenado en el TXT
+      menu_administrador();
+    }
+    else bank.menu_cliente(); //Llamamos al metodo Menu que imprime un mensaje de bienvenida y las diferentes opciones
     int respuesta = bank.input_option();//Guardamos el retorno del llamado al metodo input opcion que le pide una opcion al usuario
-    //if (respuesta == 1)
-    //{
-      //int id_cliente = bank.request_id();
+    if (respuesta == 1)
+    {
+      ;
+    }
       //bank.saldo_atm();
       //bank.saldo_cliente(id_cliente);
       //bank.retirar_dinero(id_cliente);
     //}
   }
-    //Menu de bienvenida
-    public void menu_cliente()
-    {
-        System.out.println("Bienvenido al banco UdeM, aquí están las opciones");
-        System.out.println("1. Retirar dinero desde un ATM");
-        System.out.println("2. Retirar dinero via sucursal virtual");
-        System.out.println("3. Depositar desde un ATM");
-        System.out.println("4. Depositar dinero via sucursal virtual");
-        System.out.println("5. Transferir dinero a otro cliente");
-    }
-
-    //Ingreso de la opcion del usuario, 1 para retirar dinero
-    public int input_option()
-    {
-     //try {
-      Scanner opcion_menu = new Scanner(System.in);
-        int respuesta = opcion_menu.nextInt();
-
-        return respuesta;
-
-    }
     //llamamos al metodo add_client y add_atm que se encarga de instaciar los objetos de cliente y atm
     void define_elements()
     {
@@ -69,7 +51,6 @@ class Bank
       }
       //Client cliente = new Client(id, balance);
       client_list.add(client);
-      System.out.println(client_list);
     }
     //Metodo para crear objeto de tipo ATM y añadirlo a la lista de clientes
     void add_atm(int id, int balance)
@@ -77,8 +58,53 @@ class Bank
       ATM atm = new ATM(id, balance);
       atm_list.add(atm);
     }
-
-  }
+    
+  
+  public int request_id()
+    {
+        Scanner input_id = new Scanner(System.in);
+        System.out.println("Ingrese su ID: ");
+        int id = input_id.nextInt();
+        //input_id.close();
+        return id;
+    }
+    public String request_password()
+    {
+        Scanner input_password = new Scanner(System.in);
+        System.out.println("Ingrese su contraseña: ");
+        String password = input_password.nextLine();
+        return password;
+    }
+        //Menu de bienvenida
+        public void menu_cliente()
+        {
+            System.out.println("Bienvenido al banco UdeM, aquí están las opciones");
+            System.out.println("1. Retirar dinero desde un ATM");
+            System.out.println("2. Retirar dinero via sucursal virtual");
+            System.out.println("3. Depositar desde un ATM");
+            System.out.println("4. Depositar dinero via sucursal virtual");
+            System.out.println("5. Transferir dinero a otro cliente");
+        }
+    
+        //Ingreso de la opcion del usuario, 1 para retirar dinero
+        public int input_option()
+        {
+         //try {
+          Scanner opcion_menu = new Scanner(System.in);
+            int respuesta = opcion_menu.nextInt();
+    
+            return respuesta;
+        }
+        
+    public void menu_administrador(){
+      System.out.println("Bienvenido administrador del banco UdeM");
+      System.out.println("Escoja una de las siguientes opciones");
+      System.out.println("1. Ir al menú de clientes");
+      System.out.println("2. Modificar datos un cliente");
+      System.out.println("3. Agregar un nuevo cliente");
+      System.out.println("4. Eliminar un cliente");
+        }
+}
     /* 
     //Metodo para verificar que el id ingresador por el cliente se encuentre en la lista de clientes
     boolean verify_client(int client_id) {
