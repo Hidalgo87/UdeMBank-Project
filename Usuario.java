@@ -1,14 +1,16 @@
-public class Client
+public abstract class Usuario
 {
-    int id;
-    int balance;
+    private int id;
+    private int balance;
+    private String password;
 
-    public Client(int id_ingresado, int balance_ingresado)
+    public Usuario(int id_ingresado, int balance_ingresado, String password)
     {
         this.id = id_ingresado;
         this.balance = balance_ingresado;
-    }
+        this.password = password;
 
+    }
     //Añadir Setter
     public int get_id()
     {

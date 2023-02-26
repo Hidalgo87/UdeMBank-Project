@@ -4,26 +4,29 @@ import java.util.InputMismatchException;
 import java.util.List;
 class Bank
 {
-    List<Client> client_list = new ArrayList<Client>();
+    List<Usuario> client_list = new ArrayList<Usuario>();
     List<ATM> atm_list = new ArrayList<ATM>();
 
     public Bank()
     {
         define_elements();
+        System.out.println(client_list.get(1).getClass());
+        System.out.println(client_list.get(1).get_id());
+        System.out.println(client_list.get(1).get_balance());
     }
     public void Run(Bank bank){
-    bank.menu();//Llamamos al metodo Menu que imprime un mensaje de bienvenida y las diferentes opciones
+    bank.menu_cliente();//Llamamos al metodo Menu que imprime un mensaje de bienvenida y las diferentes opciones
     int respuesta = bank.input_option();//Guardamos el retorno del llamado al metodo input opcion que le pide una opcion al usuario
-    if (respuesta == 1)
-    {
-      int id_cliente = bank.request_id();
-      bank.saldo_atm();
-      bank.saldo_cliente(id_cliente);
-      bank.retirar_dinero(id_cliente);
-    }
+    //if (respuesta == 1)
+    //{
+      //int id_cliente = bank.request_id();
+      //bank.saldo_atm();
+      //bank.saldo_cliente(id_cliente);
+      //bank.retirar_dinero(id_cliente);
+    //}
   }
     //Menu de bienvenida
-    public void menu()
+    public void menu_cliente()
     {
         System.out.println("Bienvenido al banco UdeM, aquí están las opciones");
         System.out.println("1. Retirar dinero desde un ATM");
@@ -39,27 +42,34 @@ class Bank
      //try {
       Scanner opcion_menu = new Scanner(System.in);
         int respuesta = opcion_menu.nextInt();
-        //opcion_menu.close();
+
         return respuesta;
 
-     //} catch (InputMismatchException) {
-      //System.out.println("hola");
-     //}       
-     //}
     }
     //llamamos al metodo add_client y add_atm que se encarga de instaciar los objetos de cliente y atm
     void define_elements()
     {
-      add_client(1, 10000); //Atributos id y balance para cliente
-      add_client(2, 20000);
+      add_client(1, 10000, "regular"); //Atributos id y balance para cliente
+      add_client(2, 20000, "platino");
       add_atm(1, 12000); //Atributos de id y balance para cliente
     }
 
     //Metodo para crear objeto de tipo cliente y añadirlo a la lista de clientes
-    void add_client(int id, int balance)
+    void add_client(int id, int balance, String client_type)
     {
-      Client cliente = new Client(id, balance);
-      client_list.add(cliente);
+      Usuario client = null;
+      if(client_type == "regular"){
+        Regular regular = new Regular(1, 10000, "pass123");
+        client = regular;
+      }
+
+      else if(client_type == "platino"){
+        Platinum platino = new Platinum(2, 12000, "password24");
+        client = platino;
+      }
+      //Client cliente = new Client(id, balance);
+      client_list.add(client);
+      System.out.println(client_list);
     }
     //Metodo para crear objeto de tipo ATM y añadirlo a la lista de clientes
     void add_atm(int id, int balance)
@@ -67,7 +77,9 @@ class Bank
       ATM atm = new ATM(id, balance);
       atm_list.add(atm);
     }
-    
+
+  }
+    /* 
     //Metodo para verificar que el id ingresador por el cliente se encuentre en la lista de clientes
     boolean verify_client(int client_id) {
       for (Client cliente_evaluado : client_list) { //cilo Para cada objeto de tipo cliente en la lista de clientes
@@ -153,15 +165,6 @@ class Bank
       return null;
     }
 
-    public int request_id()
-    {
-        Scanner input_id = new Scanner(System.in);
-        System.out.println("Ingrese su ID: ");
-        int id = input_id.nextInt();
-        //input_id.close();
-        return id;
-    }
-
     public void saldo_cliente(int id){
       Client cliente = query_client(id);
       System.out.println("Bienvenido persona con id " +id + " Tu saldo actual es "+ cliente.get_balance());
@@ -181,3 +184,4 @@ class Bank
         return cantidad; //Cantidad que requiere retirar el usuario
     }
 }
+/* */

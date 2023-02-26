@@ -2,4 +2,15 @@ CLASE USER:
 Esta clase será la clase padre de las clases Client_Regular y Client_Platinum y además la clase Admin, estas clases heredarán los atributos de id, contraseña y balance de la clase de User y ahora será
 desde estas clases donde instanciaremos los objetos de clientes como su tipo de dato respectivo y los objetos de tipo Admin
 
+Verificaciones de usuarios:
+Se hará desde un diccionario que contenga ID:Password que será enviado a un txt y las validaciones se harán desde aqui
+
+Lista de usuarios:
+Seguiremos utilizando una lista para guardar a los objetos que hereden de la clase Usuario(Regular, Platinum, Admin) para acceder a cada uno de ellos por medio de un indice
+
+metodo menu_admin()
+//Menu de modificacion para el administrador
+//Si no desea cambiar cierto dato ingrese n
+Modificar ID: 1 - this.getID() Busca en la lista de objetos de usuario que objeto tiene como atributo ID = 1, se guarda y ya se pueden hacer sus respectivas modificaciones
+
 

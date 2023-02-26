@@ -10,7 +10,7 @@ class ATM
         //Probando commit desde Arch Linux
     }
 
-  //properties en c#
+
     public int get_id()
     {
         return this.id;
