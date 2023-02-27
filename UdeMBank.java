@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 class Bank
 {
+    Admin admin = new Admin(0, 10000, "admin123");  
     List<Usuario> client_list = new ArrayList<Usuario>();
     List<ATM> atm_list = new ArrayList<ATM>();
 
@@ -15,11 +16,12 @@ class Bank
     int id_ingresada = bank.request_id();
     String password_ingresada = request_password();
     if(id_ingresada == 0 && password_ingresada.equals("admin123")){ //La comparacion debe hacerse con el id y contraseña del admin que está almacenado en el TXT
-      menu_administrador();
+      menu_administrador(); //Imprime el menu de opciones para el administrador
+      int respuesta = bank.input_option();
+      opcion_admin(respuesta);
     }
-    else bank.menu_cliente(); //Llamamos al metodo Menu que imprime un mensaje de bienvenida y las diferentes opciones
+    else bank.menu_cliente(); //Poner metodo de verificacion de ID y contraseña
     int respuesta = bank.input_option();//Guardamos el retorno del llamado al metodo input opcion que le pide una opcion al usuario
-    if (respuesta == 1)
     {
       ;
     }
@@ -28,7 +30,7 @@ class Bank
       //bank.retirar_dinero(id_cliente);
     //}
   }
-    //llamamos al metodo add_client y add_atm que se encarga de instaciar los objetos de cliente y atm
+    
     void define_elements()
     {
       add_client(1, 10000, "regular"); //Atributos id y balance para cliente
@@ -104,6 +106,40 @@ class Bank
       System.out.println("3. Agregar un nuevo cliente");
       System.out.println("4. Eliminar un cliente");
         }
+
+      public Usuario query_client(int id_ingresado) {
+        try{
+          for (Usuario cliente : client_list) {
+            if (cliente.get_id() == id_ingresado) {
+              return cliente;
+            }
+          }
+          throw new ClienteInexistenteError("El cliente con el ID: "+id_ingresado+" no existe, vuelva a intentarlo"); //lanzar una excepcion que imprima un mensaje de error pero que no corte el flujo 
+        }catch(ClienteInexistenteError e){
+          id_ingresado = request_id();
+          return query_client(id_ingresado);
+        }
+      }
+    public void opcion_admin(int respuesta){
+      if(respuesta == 1){
+        menu_cliente();
+      }
+      else if(respuesta == 2){
+        int id_cliente = request_id();
+        Usuario cliente = query_client(id_cliente);
+        admin.modificar_cliente(cliente);
+      }
+    }
+      
+    boolean verify_client(int client_id) {
+      for (Usuario cliente_evaluado : client_list) { //cilo Para cada objeto de tipo cliente en la lista de clientes
+        int cliente_evaluado_id = cliente_evaluado.get_id(); //guardamos el ID del cliente en la variable cliente_evaluado_id
+        if (client_id == cliente_evaluado_id) {//Si la id que ingresó el cliente es igual a la ID que se encuentra en la lista de clientes, retorna true
+          return true;
+        }
+      }
+      return false;
+    }
 }
     /* 
     //Metodo para verificar que el id ingresador por el cliente se encuentre en la lista de clientes
@@ -182,14 +218,7 @@ class Bank
     }
 
 
-    public Client query_client(int id_ingresado) {
-      for (Client cliente : client_list) {
-        if (cliente.get_id() == id_ingresado) {
-          return cliente;
-        }
-      }
-      return null;
-    }
+    
 
     public void saldo_cliente(int id){
       Client cliente = query_client(id);

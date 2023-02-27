@@ -20,6 +20,19 @@ public abstract class Usuario
         return this.balance;
     }
 
+    public int set_id(int new_id){
+        this.id = new_id;
+        return this.id;
+    }
+    public int set_balance(int new_balance){
+        this.balance = new_balance;
+        return this.balance;
+    }
+    public String set_password(String new_password){
+        this.password = new_password;
+        return this.password;
+    }
+
     void update_balance(int new_balance)
     {
       this.balance = new_balance;
