@@ -13,7 +13,7 @@ class Bank
         define_elements();
     }
     public void Run(Bank bank){
-    int id_ingresada = bank.request_id();
+    int id_ingresada = bank.request_id();  //IMPORTANTE: CREO QUE NO ES NECESARIO PASAR COMO PARAMETRO BANK
     String password_ingresada = request_password();
     if(id_ingresada == 0 && password_ingresada.equals("admin123")){ //La comparacion debe hacerse con el id y contraseña del admin que está almacenado en el TXT
       menu_administrador(); //Imprime el menu de opciones para el administrador
@@ -33,22 +33,22 @@ class Bank
     
     void define_elements()
     {
-      add_client(1, 10000, "regular"); //Atributos id y balance para cliente
-      add_client(2, 20000, "platino");
+      add_client(1, 10000, "contraseña","regular"); //Atributos id y balance para cliente
+      add_client(2, 20000, "pass12","platino");
       add_atm(1, 12000); //Atributos de id y balance para cliente
     }
 
     //Metodo para crear objeto de tipo cliente y añadirlo a la lista de clientes
-    void add_client(int id, int balance, String client_type)
+    void add_client(int id, int balance, String password, String client_type)
     {
       Usuario client = null;
-      if(client_type == "regular"){
-        Regular regular = new Regular(1, 10000, "pass123");
+      if(client_type.equals("regular")){
+        Regular regular = new Regular(id, balance, password);
         client = regular;
       }
 
-      else if(client_type == "platino"){
-        Platinum platino = new Platinum(2, 12000, "password24");
+      else if(client_type.equals("platino")){
+        Platinum platino = new Platinum(id, balance, password);
         client = platino;
       }
       //Client cliente = new Client(id, balance);
