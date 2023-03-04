@@ -28,7 +28,7 @@ public class Admin extends Usuario {
         System.out.println("Ingrese el nuevo balance del cliente");
         String new_balance = input_new_balance.nextLine();
         if(new_balance.equals("n") || new_balance.equals("N")){
-            ;
+            
         }
         modificar_balance_cliente(new_balance, cliente);
         return cliente;
