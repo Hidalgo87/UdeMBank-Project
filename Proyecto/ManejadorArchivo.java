@@ -2,10 +2,14 @@ import java.io.*;
 
 
 public class ManejadorArchivo {
+    Bank bank;
+    public ManejadorArchivo(Bank banco){
+        this.bank = banco;
+    }
     public Boolean verificar_password(int id, String password)
     {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("informacion.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("informacion.txt"));          
             String content = br.readLine();
             content = br.readLine(); //IGNORAMOS LA PRIMERA LINEA DEL TXT
             Boolean bool = false;
