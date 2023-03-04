@@ -13,12 +13,13 @@ class Bank
         define_elements();
     }
     public void Run(Bank bank){
-    int id_ingresada = bank.request_id();  //IMPORTANTE: CREO QUE NO ES NECESARIO PASAR COMO PARAMETRO BANK
+    int id_ingresada = request_id();  //IMPORTANTE: CREO QUE NO ES NECESARIO PASAR COMO PARAMETRO BANK
     String password_ingresada = request_password();
     if(id_ingresada == 0 && password_ingresada.equals("admin123")){ //La comparacion debe hacerse con el id y contraseña del admin que está almacenado en el TXT
       menu_administrador(); //Imprime el menu de opciones para el administrador
       int respuesta = bank.input_option();
       opcion_admin(respuesta);
+      imprimir_lista();
     }
     else bank.menu_cliente(); //Poner metodo de verificacion de ID y contraseña
     int respuesta = bank.input_option();//Guardamos el retorno del llamado al metodo input opcion que le pide una opcion al usuario
@@ -33,8 +34,8 @@ class Bank
     
     void define_elements()
     {
-      add_client(1, 10000, "contraseña","regular"); //Atributos id y balance para cliente
-      add_client(2, 20000, "pass12","platino");
+      add_client(1, 10000, "contraseña","platino"); //Atributos id y balance para cliente
+      add_client(2, 20000, "pass12","regular");
       add_atm(1, 12000); //Atributos de id y balance para cliente
     }
 
@@ -127,8 +128,14 @@ class Bank
       else if(respuesta == 2){
         int id_cliente = request_id();
         Usuario cliente = query_client(id_cliente);
-        admin.modificar_cliente(cliente);
+        admin.menu_modificacion(cliente);
       }
+    }
+    private void imprimir_lista(){
+      System.out.println("Lista de clientes");
+      for (Usuario cliente_i : client_list) {
+        System.out.println(cliente_i);
+    }
     }
       
     boolean verify_client(int client_id) {

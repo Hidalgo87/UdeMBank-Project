@@ -19,6 +19,10 @@ public abstract class Usuario
     public int get_balance(){
         return this.balance;
     }
+    public String get_password(){
+        return this.password;
+    }
+
 
     public int set_id(int new_id){
         this.id = new_id;
