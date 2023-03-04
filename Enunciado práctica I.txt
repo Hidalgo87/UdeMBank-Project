@@ -1,0 +1,57 @@
+Enunciado práctica I - Curso lenguajes de programación y código limpio
+En esta práctica diseñarán e implementarán UdeMBank, una aplicación para gestionar
+procesos bancarios básicos. Los requerimientos y opciones de implementación se
+describen a continuación:
+● UdeMBank tiene dos tipos de usuario: cliente y administrador.
+● Los clientes pueden ser de dos tipos: regular y platino
+● Los clientes pueden hacer las siguientes operaciones
+○ Retirar dinero desde un ATM
+○ Retirar dinero vía sucursal virtual
+○ Depositar dinero desde un ATM
+○ Depositar dinero vía sucursal virtual
+○ Transferir dinero a otro cliente
+● El banco tiene un balance general que describe el dinero de todo el banco.
+● Parte de este balance general se distribuye entre los ATM que tiene registrados el
+banco.
+● El administrador es el encargado de crear los ATM y asignarles su balance
+específico.
+● El administrador es el encargado de gestionar (agregar, eliminar, modificar) a los
+clientes. Cuando se agrega un cliente, el sistema genera automáticamente un
+número de cuenta de 10 dígitos para cada cliente. Estas cuentas son únicas.
+● Cada que un cliente hace una transacción se actualizan los balances involucrados
+(ATM y general del banco). → tener en cuenta el alcance de las variables.
+● El usuario se deberá identificar usando id y password.
+● El proceso de validación se hará usando un registro permanente del banco. Este
+proceso se puede hacer desde un txt simple o desde una base de datos simple.
+Quien desarrolle la base de datos simple, tendrá una unidad (1) de bonificación para
+la segunda práctica. Aquí se validará que el cliente efectivamente exista y haya
+ingresado sus datos correctamente.
+● Cuando el cliente elige hacer sus transacciones usando un ATM el banco le
+mostrará el listado de ATM que pueda atender su solicitud. Es decir, antes de esto,
+el sistema deberá saber el tipo de solicitud y el monto implicado.
+● Los clientes regulares tienen un cobro de 1.5% sobre cada transacción que hacen.
+● Los clientes platino tienen un cobro de 0.5% sobre cada transacción que hacen.
+● Reto adicional (una unidad adicional para la práctica dos): asignarle a cada ATM
+una dirección de Medellín. Cuando el cliente quiera hacer su proceso vía ATM, se le
+listarán los ATM de acuerdo a su distancia. En este caso el cliente ingresará su
+ubicación actual y el resultado se ajustará a este dato.
+Evaluación
+1. Diseño y modelado de la solución (1 puntos)
+a. Diagrama de clases
+2. Implementación en C# o Java (2 puntos)
+a. Convenciones código limpio (buen nombramiento, comentarios,
+claridad en el flujo)
+b. Consistencia entre el diagrama de clases y la implementación
+c. Gestión de excepciones
+3. Sustentación (2 puntos)
+A tener en cuenta
+● Si hace los retos especiales y no le hace falta nota en este evento evaluativo, la nota
+puede asignarse al próximo evento evaluativo (práctica II) o a eventos evaluativos
+pasados.
+● La práctica se puede realizar de manera individual o en parejas.
+● La sustentación será práctica y se hará sobre uno de los integrantes de la pareja de
+manera aleatoria.
+● No deben cargar nada a UVirtual pero deben gestionar su trabajo vía Github. El día
+de la entrega lo revisaremos desde allí.
+● Valor actividad: 15%
+● Fecha de entrega: 17 de marzo
