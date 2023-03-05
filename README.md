@@ -14,6 +14,3 @@ Definir un balance total para el banco (atributo).
 
 Crear un ATM adicional por ahora.
 
-Añadir 3 usuarios más y definirles contraseñas.
-
-Investigar sobre un metodo de encriptacion para las contraseñas.
