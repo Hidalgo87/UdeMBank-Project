@@ -42,6 +42,7 @@ public class ManejadorArchivo {
         bw.close();
         }
         catch (IOException e){
+            System.out.println("PRUEBA");
             e.printStackTrace();
         }
     }

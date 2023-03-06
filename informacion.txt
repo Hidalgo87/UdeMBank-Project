@@ -1,2 +1,3 @@
-1 12 10000 regular
-2 pass 11000 regular
+6 hola123 9000 platino
+2 prueba123 8000 platino
+3 test123 10000 regular

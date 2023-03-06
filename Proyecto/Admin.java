@@ -51,7 +51,7 @@ public class Admin extends Usuario {
         }
         }
         catch (InputMismatchException e){
-            System.out.println("Ingrese solo numeros");
+            System.out.println("Los ID's solo tienen valores númericos, vuelva a intentarlo");
             seleccionar_opcion(cliente);
         }
     }
@@ -91,6 +91,7 @@ public class Admin extends Usuario {
             cliente.set_balance(new_balance_int);
             System.out.println("Balance actualizado correctamente, ahora es: " + cliente.get_balance());
         }catch(NumberFormatException e){
+
             //Falta añadir para cuando se repiten los ID's
             System.out.println("El valor que ingresó como balance es invalido, intentelo de nuevo");
             Scanner nb_rigth = new Scanner(System.in);
@@ -99,8 +100,9 @@ public class Admin extends Usuario {
             }
    }
     
-    private Usuario modificar_tipo_cliente(String new_type, Usuario cliente){// TODO: FALTA ACTUALIZAR LA LISTA (con index obtenido se elimina el pasado y se usa add_client)
+    private Usuario modificar_tipo_cliente(String new_type, Usuario cliente){// todo: FALTA ACTUALIZAR LA LISTA (con index obtenido se elimina el pasado y se usa add_client)
     if(new_type.equals("regular")){
+        //Intentar cambiar su tipo con ayuda del txt, no del objeto
         manejador_archivo.modificar_archivo(3, cliente.get_id(), new_type);
         int old_id = cliente.get_id();
         int old_balance = cliente.get_balance();
@@ -120,11 +122,53 @@ public class Admin extends Usuario {
         String old_password = cliente.get_password();
         cliente = null; //Referencia de memoria vacia, el garbage collector lo borrá
         Platinum new_client = new Platinum(old_id, old_balance, old_password);
+        
         System.out.println("El tipo del cliente ahora es "+ new_client.getClass().getSimpleName());
         return new_client;
     }
     return null;
     }
 
+    public void solicitar_datos_ncliente(){
+        //Primero pedimos los datos del nuevo cliente
+            Scanner input = new Scanner(System.in);
+            int id = 0;
+            while (true) {
+                System.out.println("Ingrese el ID del nuevo cliente");
+                try{
+                    id = Integer.parseInt(input.nextLine());
+                    if(manejador_archivo.bank.id_disponible(id) && id !=0){
+                        break;
+                    }
+                    else{
+                        System.out.println("El ID que ingresó ya existe, vuelva a intentarlo");//OJO: NO ESTOY APLICANDO LA EXCEPCION
+                    }
+                }catch(NumberFormatException e){
+                    System.out.println("El valor que ingresó como ID es invalido, intentelo de nuevo");
+                }
+            }
+        
+            int balance = 0;
+            while (true) {
+                System.out.println("Ingrese el balance del nuevo cliente");
+                try{
+                    balance = Integer.parseInt(input.nextLine());
+                    break;
+                }catch(NumberFormatException e){
+                    System.out.println("El valor que ingresó como balance es invalido, intentelo de nuevo");
+                }
+            }
+        
+            System.out.println("Ingrese la contraseña del nuevo cliente");
+            String password = input.nextLine();
+            //Llamamos al metodo que la encripta y le mandamos "password" 
+            System.out.println("Ingrese el tipo del nuevo cliente (Regular o Platino)");
+            String type = input.nextLine();
+            System.out.println("Está creando un nuevo cliente con los siguientes datos");
+            System.out.println("ID: "+id + "- Balance: " + balance + "- Contraseña: " + password+ "- Tipo: " + type);
+            manejador_archivo.bank.add_client(id, balance, password, type);
+            manejador_archivo.escribir_nuevo_usuario(id,password, balance, type);
+            
+        }
     
 }

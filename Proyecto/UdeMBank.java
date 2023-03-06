@@ -51,9 +51,10 @@ class Bank
       add_atm(1, 12000); 
     }
 
-    //Metodo para crear objeto de tipo cliente y añadirlo a la lista de clientes
+    
     void add_client(int id, int balance, String password, String client_type)
     {
+      /*
       try{
       if(!id_disponible(id)){
         throw new IdExistenteError("Ya existe un usuario con ese id " + id);
@@ -64,6 +65,7 @@ class Bank
       int newid = request_id();
       add_client(newid, balance, password, client_type);
     }
+    /* */
       Usuario client = null;
       if(client_type.equals("regular")){
         Regular regular = new Regular(id, balance, password);
@@ -74,9 +76,8 @@ class Bank
         Platinum platino = new Platinum(id, balance, password);
         client = platino;
       }
-      //Client cliente = new Client(id, balance);
       client_list.add(client);
-      //manejador_archivo.escribir_nuevo_usuario(id, password, balance, client_type);
+      
     }
 
     public Boolean id_disponible(int id)
@@ -144,6 +145,7 @@ class Bank
         }
         
     public void menu_administrador(){
+      System.out.println("========================================");
       System.out.println("Bienvenido administrador del banco UdeM");
       System.out.println("Escoja una de las siguientes opciones");
       System.out.println("1. Ir al menú de clientes");
@@ -175,6 +177,8 @@ class Bank
         Usuario cliente = query_client(id_cliente);
         admin.menu_modificacion(cliente);
 
+      }else if(respuesta == 3){
+        admin.solicitar_datos_ncliente();
       }
       menu_administrador(); //Cuando ejecute alguna opción se le muestra de nuevo las opciones
       int resp = input_option();
