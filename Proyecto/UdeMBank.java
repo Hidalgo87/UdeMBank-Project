@@ -1,47 +1,69 @@
 import java.util.Scanner;
+
+import javax.lang.model.util.ElementScanner14;
+
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 //import java.util.InputMismatchException;
 import java.util.List;
 class Bank
 {
-    Admin admin = new Admin(0, 10000, "admin123");  
     List<Usuario> client_list = new ArrayList<Usuario>();
     List<ATM> atm_list = new ArrayList<ATM>();
+    ManejadorArchivo manejador_archivo = new ManejadorArchivo(this);
+    Admin admin = new Admin(0, 10000, "admin123", manejador_archivo);;  
 
     public Bank()
     {
-        define_elements();
+      define_atms();
+      manejador_archivo.generar_lista_usuarios();
     }
     public void Run(Bank bank){
-    int id_ingresada = request_id();  //IMPORTANTE: CREO QUE NO ES NECESARIO PASAR COMO PARAMETRO BANK
+    int id_ingresada = request_id(); 
     String password_ingresada = request_password();
-    if(id_ingresada == 0 && password_ingresada.equals("admin123")){ //La comparacion debe hacerse con el id y contraseña del admin que está almacenado en el TXT
+    if(id_ingresada == 0 && password_ingresada.equals("admin123")){
       menu_administrador(); //Imprime el menu de opciones para el administrador
-      int respuesta = bank.input_option();
+      int respuesta = input_option();
       opcion_admin(respuesta);
       imprimir_lista();
     }
-    else bank.menu_cliente(); //Poner metodo de verificacion de ID y contraseña
-    int respuesta = bank.input_option();//Guardamos el retorno del llamado al metodo input opcion que le pide una opcion al usuario
-    {
-      ;
+    else if(manejador_archivo.verificar_password(id_ingresada, password_ingresada)){ // es un cliente del banco
+      bank.menu_cliente();
     }
+    else{
+      try {
+        throw new  UsuarioNoEncontradoError("No se encontró un usuario registrado con esas credenciales");
+      } catch (UsuarioNoEncontradoError e) {
+        Run(bank); // volver a solicitar las credenciales
+      }
+    }
+    //int respuesta = bank.input_option();//Guardamos el retorno del llamado al metodo input opcion que le pide una opcion al usuario
       //bank.saldo_atm();
       //bank.saldo_cliente(id_cliente);
       //bank.retirar_dinero(id_cliente);
     //}
   }
+
+
     
-    void define_elements()
+    void define_atms()
     {
-      add_client(1, 10000, "contraseña","platino"); //Atributos id y balance para cliente
-      add_client(2, 20000, "pass12","regular");
-      add_atm(1, 12000); //Atributos de id y balance para cliente
+      add_atm(1, 12000); 
     }
 
     //Metodo para crear objeto de tipo cliente y añadirlo a la lista de clientes
     void add_client(int id, int balance, String password, String client_type)
     {
+      try{
+      if(!id_disponible(id)){
+        throw new IdExistenteError("Ya existe un usuario con ese id " + id);
+      }
+    }
+    catch (IdExistenteError e)
+    {
+      int newid = request_id();
+      add_client(newid, balance, password, client_type);
+    }
       Usuario client = null;
       if(client_type.equals("regular")){
         Regular regular = new Regular(id, balance, password);
@@ -54,6 +76,17 @@ class Bank
       }
       //Client cliente = new Client(id, balance);
       client_list.add(client);
+      //manejador_archivo.escribir_nuevo_usuario(id, password, balance, client_type);
+    }
+
+    public Boolean id_disponible(int id)
+    {
+      for (Usuario usuario: client_list){
+        if(usuario.get_id() == id){
+          return false;
+        }
+      }
+      return true;
     }
     //Metodo para crear objeto de tipo ATM y añadirlo a la lista de clientes
     void add_atm(int id, int balance)
@@ -65,11 +98,17 @@ class Bank
   
   public int request_id()
     {
+      try{
         Scanner input_id = new Scanner(System.in);
         System.out.println("Ingrese su ID: ");
         int id = input_id.nextInt();
         //input_id.close();
         return id;
+      }
+      catch (InputMismatchException e ){
+        System.out.println("Ingrese solo numeros");
+        return request_id();
+      }
     }
     public String request_password()
     {
@@ -92,11 +131,16 @@ class Bank
         //Ingreso de la opcion del usuario, 1 para retirar dinero
         public int input_option()
         {
-         //try {
+         try {
           Scanner opcion_menu = new Scanner(System.in);
             int respuesta = opcion_menu.nextInt();
-    
             return respuesta;
+         }
+         catch (InputMismatchException e)
+         {
+          System.out.println("Ingrese solo numeros");
+          return input_option();
+         }
         }
         
     public void menu_administrador(){
@@ -121,6 +165,7 @@ class Bank
           return query_client(id_ingresado);
         }
       }
+
     public void opcion_admin(int respuesta){
       if(respuesta == 1){
         menu_cliente();
@@ -129,8 +174,13 @@ class Bank
         int id_cliente = request_id();
         Usuario cliente = query_client(id_cliente);
         admin.menu_modificacion(cliente);
+
       }
+      menu_administrador(); //Cuando ejecute alguna opción se le muestra de nuevo las opciones
+      int resp = input_option();
+      opcion_admin(resp);
     }
+
     private void imprimir_lista(){
       System.out.println("Lista de clientes");
       for (Usuario cliente_i : client_list) {

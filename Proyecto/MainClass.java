@@ -4,7 +4,6 @@ class MainClass
   {
     Bank bank = new Bank();
     bank.Run(bank);
-    ManejadorArchivo file_manager = new ManejadorArchivo(bank);
 
 
     //ManejadorArchivo manejador = new ManejadorArchivo();

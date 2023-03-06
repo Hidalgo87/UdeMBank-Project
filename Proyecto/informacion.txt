@@ -1,5 +1,0 @@
-id contraseña balance (tipo{no estoy seguro})
-0 admin123 10000 admin
-4 eaea 400
-4 eaea 400
-4 eaea 400

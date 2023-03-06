@@ -1,1 +1,2 @@
-4 eaea 400
+1 12 10000 regular
+2 pass 11000 regular
