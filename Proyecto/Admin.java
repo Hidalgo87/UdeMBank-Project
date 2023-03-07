@@ -3,9 +3,11 @@ import java.util.Scanner;
 
 public class Admin extends Usuario {
     ManejadorArchivo manejador_archivo;
+    Bank bank;
 
     public Admin(int id, int balance, String password, ManejadorArchivo ma){ super(id, balance, password);
         manejador_archivo = ma;
+        bank = manejador_archivo.bank;
     }
 
     public void menu_modificacion(Usuario cliente){
@@ -58,7 +60,7 @@ public class Admin extends Usuario {
 
     private void modificar_id_cliente(String new_id, Usuario cliente){
     try{
-        if(!manejador_archivo.bank.id_disponible(Integer.parseInt(new_id))){
+        if(!bank.id_disponible(Integer.parseInt(new_id))){
             throw new IdExistenteError("Ese id no está disponible");
         }
         int new_id_int = Integer.parseInt(new_id);
@@ -68,11 +70,11 @@ public class Admin extends Usuario {
     }catch(NumberFormatException e){
         //Falta añadir para cuando se repiten los ID's
         System.out.println("El valor que ingresó como ID es invalido, intentelo de nuevo");
-        String right_id = String.valueOf(manejador_archivo.bank.request_id());
+        String right_id = String.valueOf(bank.request_id());
         modificar_id_cliente(right_id, cliente);
         }
         catch (IdExistenteError e){
-        String right_id = String.valueOf(manejador_archivo.bank.request_id());
+        String right_id = String.valueOf(bank.request_id());
         modificar_id_cliente(right_id, cliente);  
         }
     }
@@ -109,7 +111,7 @@ public class Admin extends Usuario {
         String old_password = cliente.get_password();
         //cliente = null; //Referencia de memoria vacia, el garbage collector lo borrá
         System.out.println("entró");
-        cliente = manejador_archivo.bank.query_client(old_id);
+        cliente = bank.query_client(old_id);
         System.out.println("ea " + cliente.get_password());
         Regular new_client = new Regular(old_id, old_balance, old_password);
         System.out.println("El tipo del cliente ahora es "+ new_client.getClass().getSimpleName());
@@ -137,7 +139,7 @@ public class Admin extends Usuario {
                 System.out.println("Ingrese el ID del nuevo cliente");
                 try{
                     id = Integer.parseInt(input.nextLine());
-                    if(manejador_archivo.bank.id_disponible(id) && id !=0){
+                    if(bank.id_disponible(id) && id !=0){
                         break;
                     }
                     else{
@@ -166,9 +168,13 @@ public class Admin extends Usuario {
             String type = input.nextLine();
             System.out.println("Está creando un nuevo cliente con los siguientes datos");
             System.out.println("ID: "+id + "- Balance: " + balance + "- Contraseña: " + password+ "- Tipo: " + type);
-            manejador_archivo.bank.add_client(id, balance, password, type);
+            bank.add_client(id, balance, password, type);
             manejador_archivo.escribir_nuevo_usuario(id,password, balance, type);
             
         }
     
+    public void eliminar_cliente(int id){
+        Usuario cliente = bank.query_client(id);
+        
+    }
 }
