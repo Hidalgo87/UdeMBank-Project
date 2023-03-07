@@ -4,6 +4,7 @@ import java.util.Scanner;
 public class Admin extends Usuario {
     ManejadorArchivo manejador_archivo;
     Bank bank;
+    //Encriptacion passwordEncrypter = new Encriptacion();
 
     public Admin(int id, int balance, String password, ManejadorArchivo ma){ super(id, balance, password);
         manejador_archivo = ma;
@@ -81,8 +82,9 @@ public class Admin extends Usuario {
     
     private void modificar_contraseña_cliente(String new_password, Usuario cliente){
         manejador_archivo.modificar_archivo(1, cliente.get_id(), new_password);
-        cliente.set_password(new_password);
-        System.out.println("La nueva contraseña ahora es "+cliente.get_password());
+        String new_password_encrypted = PasswordEncrypter.encrypt(new_password);
+        cliente.set_password(new_password_encrypted);
+        System.out.println("La nueva contraseña ahora es "+new_password_encrypted);
         //Excepcion por si la contraseña es igual
    }
 
@@ -110,11 +112,11 @@ public class Admin extends Usuario {
         int old_balance = cliente.get_balance();
         String old_password = cliente.get_password();
         //cliente = null; //Referencia de memoria vacia, el garbage collector lo borrá
-        System.out.println("entró");
         cliente = bank.query_client(old_id);
-        System.out.println("ea " + cliente.get_password());
         Regular new_client = new Regular(old_id, old_balance, old_password);
+        manejador_archivo.generar_lista_usuarios();
         System.out.println("El tipo del cliente ahora es "+ new_client.getClass().getSimpleName());
+
         return new_client;
     }
     if(new_type.equals("platino")){
@@ -122,9 +124,10 @@ public class Admin extends Usuario {
         int old_id = cliente.get_id();
         int old_balance = cliente.get_balance();
         String old_password = cliente.get_password();
-        cliente = null; //Referencia de memoria vacia, el garbage collector lo borrá
+        cliente = bank.query_client(old_id);
         Platinum new_client = new Platinum(old_id, old_balance, old_password);
-        
+        //cliente = null; //Referencia de memoria vacia, el garbage collector lo borrá
+        manejador_archivo.generar_lista_usuarios();
         System.out.println("El tipo del cliente ahora es "+ new_client.getClass().getSimpleName());
         return new_client;
     }
@@ -162,19 +165,27 @@ public class Admin extends Usuario {
             }
         
             System.out.println("Ingrese la contraseña del nuevo cliente");
-            String password = input.nextLine();
-            //Llamamos al metodo que la encripta y le mandamos "password" 
+            String original_password = input.nextLine();
+            //Llamamos al metodo que la encripta y le mandamos la contraseña ingresada por el usuario
+            String password = PasswordEncrypter.encrypt(original_password);
+            
+
             System.out.println("Ingrese el tipo del nuevo cliente (Regular o Platino)");
             String type = input.nextLine();
-            System.out.println("Está creando un nuevo cliente con los siguientes datos");
-            System.out.println("ID: "+id + "- Balance: " + balance + "- Contraseña: " + password+ "- Tipo: " + type);
+            System.out.println("Ha creado un nuevo cliente con los siguientes datos");
+            System.out.println("ID: "+id + " - Balance: " + balance + " - Contraseña: " + original_password+ " - Tipo: " + type);
+            System.out.println("Ingresando nuevamente al menú...");
             bank.add_client(id, balance, password, type);
             manejador_archivo.escribir_nuevo_usuario(id,password, balance, type);
             
         }
     
-    public void eliminar_cliente(int id){
-        Usuario cliente = bank.query_client(id);
+    public void eliminar_cliente(int id, Usuario cliente){
         
+        System.out.println(cliente);
+        bank.client_list.remove(cliente);
+        //manejador_archivo.generar_lista_usuarios();
+        System.out.println("La lista de clientes ahora está asi "+bank.client_list );
+        System.out.println("Falta que se actualice el TXT!");
     }
 }
