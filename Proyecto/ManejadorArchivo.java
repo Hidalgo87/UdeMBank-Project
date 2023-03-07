@@ -52,6 +52,7 @@ public class ManejadorArchivo {
         try {
             BufferedReader br = new BufferedReader(new FileReader("informacion.txt"));          
             String content = br.readLine();
+            bank.client_list.clear();
             while (content != null)
             {
                 String[] datos = content.split(" ");

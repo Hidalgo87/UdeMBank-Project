@@ -1,7 +1,5 @@
 import java.util.Scanner;
 
-import javax.lang.model.util.ElementScanner14;
-
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 //import java.util.InputMismatchException;
@@ -11,7 +9,7 @@ class Bank
     List<Usuario> client_list = new ArrayList<Usuario>();
     List<ATM> atm_list = new ArrayList<ATM>();
     ManejadorArchivo manejador_archivo = new ManejadorArchivo(this);
-    Admin admin = new Admin(0, 10000, "admin123", manejador_archivo);;  
+    Admin admin = new Admin(0, 10000, "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9", manejador_archivo);;  
 
     public Bank()
     {
@@ -21,13 +19,16 @@ class Bank
     public void Run(Bank bank){
     int id_ingresada = request_id(); 
     String password_ingresada = request_password();
-    if(id_ingresada == 0 && password_ingresada.equals("admin123")){
+    String password = PasswordEncrypter.encrypt(password_ingresada);//Para validar las contraseñas primero guardamos la contraseña ingresada por el usuario
+    //Luego la encriptamos y la comparamos con las contraseñas almacenadas en el TXT, de tal forma que se comparan contraseñas encriptadas
+
+    if(id_ingresada == 0 && password.equals("240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9")){
       menu_administrador(); //Imprime el menu de opciones para el administrador
       int respuesta = input_option();
       opcion_admin(respuesta);
-      imprimir_lista();
+      //imprimir_lista();
     }
-    else if(manejador_archivo.verificar_password(id_ingresada, password_ingresada)){ // es un cliente del banco
+    else if(manejador_archivo.verificar_password(id_ingresada, password)){ // es un cliente del banco
       bank.menu_cliente();
     }
     else{
@@ -152,6 +153,7 @@ class Bank
       System.out.println("2. Modificar datos un cliente");
       System.out.println("3. Agregar un nuevo cliente");
       System.out.println("4. Eliminar un cliente");
+      System.out.println("5. Salir del programa");
         }
 
       public Usuario query_client(int id_ingresado) {
@@ -179,7 +181,16 @@ class Bank
 
       }else if(respuesta == 3){
         admin.solicitar_datos_ncliente();
+
+      }else if(respuesta == 4){
+        System.out.println("Lista actual antes "+client_list);
+        int id_cliente = request_id();
+        Usuario cliente = query_client(id_cliente);
+        admin.eliminar_cliente(id_cliente, cliente);
+      }else if(respuesta == 5){
+        System.exit(0);
       }
+      //imprimir_lista();
       menu_administrador(); //Cuando ejecute alguna opción se le muestra de nuevo las opciones
       int resp = input_option();
       opcion_admin(resp);
