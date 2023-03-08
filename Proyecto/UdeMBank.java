@@ -74,7 +74,7 @@ class Bank
       }
 
       else if(client_type.equals("platino")){
-        Platinum platino = new Platinum(id, balance, password);
+        Platino platino = new Platino(id, balance, password);
         client = platino;
       }
       client_list.add(client);

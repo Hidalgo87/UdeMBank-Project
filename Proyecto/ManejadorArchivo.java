@@ -97,4 +97,34 @@ public class ManejadorArchivo {
         }
     }
     
+
+    public void eliminar_cliente_archivo(int id_actual) {
+        try {
+            File archivo = new File("informacion.txt");
+            File archivo_temp = new File("informacion_temp.txt");
+            FileReader fr = new FileReader(archivo);
+            BufferedReader br = new BufferedReader(fr);
+            FileWriter fw = new FileWriter(archivo_temp);
+            BufferedWriter bw = new BufferedWriter(fw);
+            String linea = br.readLine();
+            while (linea != null) {
+                String[] datos = linea.split(" ");
+                if (datos[0].equals(Integer.toString(id_actual))) {
+                    ; // SI ES EL CLIENTE A ELIMINAR, NO LO TOMO
+                }
+                else{
+                    bw.write(datos[0] + " " + datos[1] + " " + datos[2] + " " + datos[3] + "\n");   
+                }
+                linea = br.readLine();
+            }
+            fr.close();
+            br.close();
+            bw.close();
+            fw.close();
+            archivo.delete();
+            archivo_temp.renameTo(archivo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

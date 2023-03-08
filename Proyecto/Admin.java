@@ -3,12 +3,10 @@ import java.util.Scanner;
 
 public class Admin extends Usuario {
     ManejadorArchivo manejador_archivo;
-    Bank bank;
     //Encriptacion passwordEncrypter = new Encriptacion();
 
     public Admin(int id, int balance, String password, ManejadorArchivo ma){ super(id, balance, password);
         manejador_archivo = ma;
-        bank = manejador_archivo.bank;
     }
 
     public void menu_modificacion(Usuario cliente){
@@ -49,7 +47,6 @@ public class Admin extends Usuario {
             System.out.println("El tipo actual del cliente es " + cliente.getClass().getSimpleName());
             System.out.println("Ingrese el nuevo tipo del cliente (Regular o Platino)");
             String new_info = input_new_info.nextLine().toLowerCase();
-            System.out.println("va a entrar");
             modificar_tipo_cliente(new_info, cliente);
         }
         }
@@ -61,7 +58,7 @@ public class Admin extends Usuario {
 
     private void modificar_id_cliente(String new_id, Usuario cliente){
     try{
-        if(!bank.id_disponible(Integer.parseInt(new_id))){
+        if(!manejador_archivo.bank.id_disponible(Integer.parseInt(new_id))){
             throw new IdExistenteError("Ese id no está disponible");
         }
         int new_id_int = Integer.parseInt(new_id);
@@ -71,20 +68,22 @@ public class Admin extends Usuario {
     }catch(NumberFormatException e){
         //Falta añadir para cuando se repiten los ID's
         System.out.println("El valor que ingresó como ID es invalido, intentelo de nuevo");
-        String right_id = String.valueOf(bank.request_id());
+        String right_id = String.valueOf(manejador_archivo.bank.request_id());
         modificar_id_cliente(right_id, cliente);
         }
         catch (IdExistenteError e){
-        String right_id = String.valueOf(bank.request_id());
+        String right_id = String.valueOf(manejador_archivo.bank.request_id());
         modificar_id_cliente(right_id, cliente);  
         }
     }
     
     private void modificar_contraseña_cliente(String new_password, Usuario cliente){
-        manejador_archivo.modificar_archivo(1, cliente.get_id(), new_password);
+        
         String new_password_encrypted = PasswordEncrypter.encrypt(new_password);
         cliente.set_password(new_password_encrypted);
-        System.out.println("La nueva contraseña ahora es "+new_password_encrypted);
+        manejador_archivo.modificar_archivo(1, cliente.get_id(), new_password_encrypted);
+        //manejador_archivo.generar_lista_usuarios();
+        System.out.println("La nueva contraseña ahora es "+new_password);
         //Excepcion por si la contraseña es igual
    }
 
@@ -112,9 +111,10 @@ public class Admin extends Usuario {
         int old_balance = cliente.get_balance();
         String old_password = cliente.get_password();
         //cliente = null; //Referencia de memoria vacia, el garbage collector lo borrá
-        cliente = bank.query_client(old_id);
+        cliente = manejador_archivo.bank.query_client(old_id);
         Regular new_client = new Regular(old_id, old_balance, old_password);
         manejador_archivo.generar_lista_usuarios();
+        System.out.println("lista despues de cambiar el tipo; "+ manejador_archivo.bank.client_list);
         System.out.println("El tipo del cliente ahora es "+ new_client.getClass().getSimpleName());
 
         return new_client;
@@ -124,8 +124,8 @@ public class Admin extends Usuario {
         int old_id = cliente.get_id();
         int old_balance = cliente.get_balance();
         String old_password = cliente.get_password();
-        cliente = bank.query_client(old_id);
-        Platinum new_client = new Platinum(old_id, old_balance, old_password);
+        cliente = manejador_archivo.bank.query_client(old_id);
+        Platino new_client = new Platino(old_id, old_balance, old_password);
         //cliente = null; //Referencia de memoria vacia, el garbage collector lo borrá
         manejador_archivo.generar_lista_usuarios();
         System.out.println("El tipo del cliente ahora es "+ new_client.getClass().getSimpleName());
@@ -142,7 +142,7 @@ public class Admin extends Usuario {
                 System.out.println("Ingrese el ID del nuevo cliente");
                 try{
                     id = Integer.parseInt(input.nextLine());
-                    if(bank.id_disponible(id) && id !=0){
+                    if(manejador_archivo.bank.id_disponible(id) && id !=0){
                         break;
                     }
                     else{
@@ -175,7 +175,7 @@ public class Admin extends Usuario {
             System.out.println("Ha creado un nuevo cliente con los siguientes datos");
             System.out.println("ID: "+id + " - Balance: " + balance + " - Contraseña: " + original_password+ " - Tipo: " + type);
             System.out.println("Ingresando nuevamente al menú...");
-            bank.add_client(id, balance, password, type);
+            manejador_archivo.bank.add_client(id, balance, password, type);
             manejador_archivo.escribir_nuevo_usuario(id,password, balance, type);
             
         }
@@ -183,9 +183,8 @@ public class Admin extends Usuario {
     public void eliminar_cliente(int id, Usuario cliente){
         
         System.out.println(cliente);
-        bank.client_list.remove(cliente);
-        //manejador_archivo.generar_lista_usuarios();
-        System.out.println("La lista de clientes ahora está asi "+bank.client_list );
-        System.out.println("Falta que se actualice el TXT!");
+        manejador_archivo.bank.client_list.remove(cliente);
+        manejador_archivo.eliminar_cliente_archivo(id);
+        System.out.println("nueva lista de clientes ahora está asi "+manejador_archivo.bank.client_list );
     }
 }

@@ -1,7 +1,7 @@
-public class Platinum extends Usuario{
+public class Platino extends Usuario{
     private double comision = 0.005; //Comision del 0.5%
 
-    public Platinum(int id, int balance, String password){ super(id, balance, password);
+    public Platino(int id, int balance, String password){ super(id, balance, password);
     }
 
     public double get_comision(){
