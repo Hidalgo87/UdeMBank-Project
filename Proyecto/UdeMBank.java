@@ -16,7 +16,7 @@ class Bank
       define_atms();
       manejador_archivo.generar_lista_usuarios();
     }
-    public void Run(Bank bank){
+    public void Run(){
     int id_ingresada = request_id(); 
     String password_ingresada = request_password();
     String password = PasswordEncrypter.encrypt(password_ingresada);//Para validar las contraseñas primero guardamos la contraseña ingresada por el usuario
@@ -29,13 +29,13 @@ class Bank
       //imprimir_lista();
     }
     else if(manejador_archivo.verificar_password(id_ingresada, password)){ // es un cliente del banco
-      bank.menu_cliente();
+      menu_cliente();
     }
     else{
       try {
         throw new  UsuarioNoEncontradoError("No se encontró un usuario registrado con esas credenciales");
       } catch (UsuarioNoEncontradoError e) {
-        Run(bank); // volver a solicitar las credenciales
+        Run(); // volver a solicitar las credenciales
       }
     }
     //int respuesta = bank.input_option();//Guardamos el retorno del llamado al metodo input opcion que le pide una opcion al usuario
@@ -112,7 +112,8 @@ class Bank
         return request_id();
       }
     }
-    public String request_password()
+  
+  public String request_password()
     {
         Scanner input_password = new Scanner(System.in);
         System.out.println("Ingrese su contraseña: ");
