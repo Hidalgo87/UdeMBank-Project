@@ -54,6 +54,7 @@ public class Admin extends Usuario {
             System.out.println("Los ID's solo tienen valores númericos, vuelva a intentarlo");
             seleccionar_opcion(cliente);
         }
+
     }
 
     private void modificar_id_cliente(String new_id, Usuario cliente){
@@ -186,5 +187,52 @@ public class Admin extends Usuario {
         manejador_archivo.bank.client_list.remove(cliente);
         manejador_archivo.eliminar_cliente_archivo(id);
         System.out.println("nueva lista de clientes ahora está asi "+manejador_archivo.bank.client_list );
+    }
+    public void crear_atm(){
+        manejador_archivo.bank.imprimir_lista_atm();
+        System.out.println("El balance actual del banco es: "+ manejador_archivo.bank.balance_banco+"$");
+        Scanner datos = new Scanner(System.in);
+        int id = 0;
+        while (true) {
+            System.out.println("Ingrese el ID del nuevo ATM");
+            try{
+                id = Integer.parseInt(datos.nextLine());
+                if(manejador_archivo.bank.id_disponible_atm(id)){
+                    break;
+                }
+                else{
+                    System.out.println("El ID de ATM que ingresó ya existe, vuelva a intentarlo");//OJO: NO ESTOY APLICANDO LA EXCEPCION
+                }
+            }catch(NumberFormatException e){
+                System.out.println("El valor que ingresó como ID es invalido, intentelo de nuevo");
+            }
+        }
+    
+        int balance = 0;
+        while (true) {
+            System.out.println("Ingrese el balance del nuevo ATM");
+            try{
+                balance = Integer.parseInt(datos.nextLine());
+                if(manejador_archivo.bank.balance_disponible(balance)){
+                    break;
+                }else{
+                    System.out.println("El balance que ingreśo para el cajero es muy alto, el banco no tiene suficiente dinero");
+                }
+                
+            }catch(NumberFormatException e){
+                System.out.println("El valor que ingresó como balance es invalido, intentelo de nuevo");
+            }
+        }
+        manejador_archivo.bank.add_atm(id, balance);
+        manejador_archivo.escribir_nuevo_amt(id, balance);
+        System.out.println("Ha creado un nuevo ATM con los siguientes datos");
+        System.out.println("ID: "+id + " - Balance: " + balance);
+    }
+    @Override
+    public void withdraw_client(int wd_amount){
+        int nuevo_balance = get_balance() - wd_amount;
+         update_balance(nuevo_balance);
+         System.out.println("Se realizó el retiro con exito!");
+         System.out.println("Nuevo saldo: " + this.get_balance());
     }
 }

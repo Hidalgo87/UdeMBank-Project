@@ -54,13 +54,6 @@ public abstract class Usuario
         }
     }
 
-  public void withdraw_client(int wd_amount)
-  {
-      int nuevo_balance;
-      nuevo_balance = balance - wd_amount;
-      update_balance(nuevo_balance);    
-      System.out.println("Se realizó el retiro con exito");
-      System.out.println("Nuevo saldo: " +this.balance);
-  }
-
+  public abstract void withdraw_client(int wd_amount)
+    ;
   }

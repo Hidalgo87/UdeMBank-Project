@@ -6,14 +6,16 @@ import java.util.InputMismatchException;
 import java.util.List;
 class Bank
 {
+    int balance_banco = 500000;
     List<Usuario> client_list = new ArrayList<Usuario>();
     List<ATM> atm_list = new ArrayList<ATM>();
     ManejadorArchivo manejador_archivo = new ManejadorArchivo(this);
-    Admin admin = new Admin(0, 10000, "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9", manejador_archivo);;  
+    Admin admin = new Admin(0, 100000, "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9", manejador_archivo);;  
+    Gestion_Financiera gestor_finanza = new Gestion_Financiera(this);
 
     public Bank()
     {
-      define_atms();
+      manejador_archivo.generar_lista_atm();
       manejador_archivo.generar_lista_usuarios();
     }
     public void Run(){
@@ -26,10 +28,13 @@ class Bank
       menu_administrador(); //Imprime el menu de opciones para el administrador
       int respuesta = input_option();
       opcion_admin(respuesta);
-      //imprimir_lista();
     }
+
+    //CASO PARA EL CLIENTE NORMAL
     else if(manejador_archivo.verificar_password(id_ingresada, password)){ // es un cliente del banco
       menu_cliente();
+      int respuesta = input_option();
+      opcion_usuario(respuesta, id_ingresada);
     }
     else{
       try {
@@ -38,35 +43,26 @@ class Bank
         Run(); // volver a solicitar las credenciales
       }
     }
-    //int respuesta = bank.input_option();//Guardamos el retorno del llamado al metodo input opcion que le pide una opcion al usuario
-      //bank.saldo_atm();
-      //bank.saldo_cliente(id_cliente);
-      //bank.retirar_dinero(id_cliente);
-    //}
   }
 
 
-    
+    /* 
     void define_atms()
     {
-      add_atm(1, 12000); 
+      add_atm(1, 150000);
+      add_atm(2, 30000);
+      add_atm(3, 50000);  
+    }
+    /* */
+    void add_atm(int id, int balance)
+    {
+      ATM atm = new ATM(id, balance);
+      atm_list.add(atm);
     }
 
     
     void add_client(int id, int balance, String password, String client_type)
     {
-      /*
-      try{
-      if(!id_disponible(id)){
-        throw new IdExistenteError("Ya existe un usuario con ese id " + id);
-      }
-    }
-    catch (IdExistenteError e)
-    {
-      int newid = request_id();
-      add_client(newid, balance, password, client_type);
-    }
-    /* */
       Usuario client = null;
       if(client_type.equals("regular")){
         Regular regular = new Regular(id, balance, password);
@@ -90,19 +86,29 @@ class Bank
       }
       return true;
     }
-    //Metodo para crear objeto de tipo ATM y añadirlo a la lista de clientes
-    void add_atm(int id, int balance)
+    public Boolean id_disponible_atm(int id)
     {
-      ATM atm = new ATM(id, balance);
-      atm_list.add(atm);
+      for (ATM atm: atm_list){
+        if(atm.get_id() == id){
+          return false;
+        }
+      }
+      return true;
     }
-    
-  
+    public boolean balance_disponible(int balance){
+      if(balance <= balance_banco){
+        balance_banco = balance_banco - balance;
+        System.out.println("Nuevo balance del banco: " +balance_banco);
+        return true;
+      }
+    return false;  
+    }
+
   public int request_id()
     {
       try{
         Scanner input_id = new Scanner(System.in);
-        System.out.println("Ingrese su ID: ");
+        System.out.println("Ingrese el ID: ");
         int id = input_id.nextInt();
         //input_id.close();
         return id;
@@ -129,6 +135,7 @@ class Bank
             System.out.println("3. Depositar desde un ATM");
             System.out.println("4. Depositar dinero via sucursal virtual");
             System.out.println("5. Transferir dinero a otro cliente");
+            
         }
     
         //Ingreso de la opcion del usuario, 1 para retirar dinero
@@ -154,7 +161,8 @@ class Bank
       System.out.println("2. Modificar datos un cliente");
       System.out.println("3. Agregar un nuevo cliente");
       System.out.println("4. Eliminar un cliente");
-      System.out.println("5. Salir del programa");
+      System.out.println("5. Crear un ATM");
+      System.out.println("6. Salir del programa");
         }
 
       public Usuario query_client(int id_ingresado) {
@@ -170,6 +178,15 @@ class Bank
           return query_client(id_ingresado);
         }
       }
+
+      public ATM query_atm(int id_ingresado) {
+          for (ATM atm_actual : atm_list) {
+            if (atm_actual.get_id() == id_ingresado) {
+              return atm_actual;
+            }
+          }return null;//Aqui no va a llegar ningun ID que no existe, entonces nunca retornará null
+        }
+      
 
     public void opcion_admin(int respuesta){
       if(respuesta == 1){
@@ -188,8 +205,9 @@ class Bank
         int id_cliente = request_id();
         Usuario cliente = query_client(id_cliente);
         admin.eliminar_cliente(id_cliente, cliente);
+
       }else if(respuesta == 5){
-        System.exit(0);
+        admin.crear_atm();
       }
       //imprimir_lista();
       menu_administrador(); //Cuando ejecute alguna opción se le muestra de nuevo las opciones
@@ -197,11 +215,29 @@ class Bank
       opcion_admin(resp);
     }
 
+    public void opcion_usuario(int respuesta, int id_usuario){
+      Usuario cliente = query_client(id_usuario);
+      if(respuesta == 1){
+        gestor_finanza.retirar_dinero_atm(cliente);
+      }else if(respuesta == 2){
+        gestor_finanza.retirar_dinero_sucursal();
+      }else if(respuesta == 3){
+
+      }
+    }
+
     private void imprimir_lista(){
       System.out.println("Lista de clientes");
       for (Usuario cliente_i : client_list) {
         System.out.println(cliente_i);
+      }
     }
+
+    public void imprimir_lista_atm(){
+      System.out.println("Lista de cajeros: ");
+      for (ATM atm : atm_list) {
+        System.out.println("ID: "+atm.get_id()+" Balance: "+ atm.get_balance());
+      }
     }
       
     boolean verify_client(int client_id) {
