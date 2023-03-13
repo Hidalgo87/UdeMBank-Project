@@ -19,7 +19,7 @@ public class Platino extends Usuario{
             
         }else{
             update_balance(nuevo_balance.intValue());    
-            System.out.println("Se realizó el retiro con éxito");
+            System.out.println("Movimiento realizado con éxito!");
             System.out.println("Monto del retiro: " + montoRetiro+"$");
             System.out.println("Comisión aplicada: " + montoComision.intValue()+"$");
             System.out.println("Nuevo saldo: " + this.get_balance()+"$");
