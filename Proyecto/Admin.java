@@ -171,8 +171,17 @@ public class Admin extends Usuario {
             String password = PasswordEncrypter.encrypt(original_password);
             
 
-            System.out.println("Ingrese el tipo del nuevo cliente (Regular o Platino)");
-            String type = input.nextLine();
+            String type = "";
+            while(true){
+                System.out.println("Ingrese el tipo del nuevo cliente (Regular o Platino)");
+                type = input.nextLine().toLowerCase();
+                if(type.equals("regular") || type.equals("platino")){
+                    break;
+            }else{
+                System.out.println("Ingresó un tipo de cliente invalido, vuelva a intentarlo");
+                }    
+            }
+
             System.out.println("Ha creado un nuevo cliente con los siguientes datos");
             System.out.println("ID: "+id + " - Balance: " + balance + " - Contraseña: " + original_password+ " - Tipo: " + type);
             System.out.println("Ingresando nuevamente al menú...");
@@ -183,10 +192,10 @@ public class Admin extends Usuario {
     
     public void eliminar_cliente(int id, Usuario cliente){
         
-        System.out.println(cliente);
         manejador_archivo.bank.client_list.remove(cliente);
         manejador_archivo.eliminar_cliente_archivo(id);
         System.out.println("nueva lista de clientes ahora está asi "+manejador_archivo.bank.client_list );
+
     }
     public void crear_atm(){
         manejador_archivo.bank.imprimir_lista_atm();

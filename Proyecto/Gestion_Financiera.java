@@ -121,13 +121,31 @@ public class Gestion_Financiera {
         //Añadimos el deposito hecho por el cliente, a el cajero
         ATM cajero = banco.query_atm(id_cajero);
         int nuevo_saldo_cajero = cajero.get_balance() + cantidad;
+        String nuevo_balance_cajero = Integer.toString(nuevo_saldo_cajero);
         cajero.update_balance(nuevo_saldo_cajero);
-        System.out.println("Saldo del cajero: "+cajero.get_balance());
+        banco.manejador_archivo.modificar_archivo_atm(1, cajero.get_id(), nuevo_balance_cajero);
+        banco.balance_banco = banco.balance_banco + cantidad;
+        
+        //Actualizamos el balance del cliente tanto del objeto como del txt
+        int nuevo_saldo_cliente = cliente.get_balance() + cantidad;
+        cliente.update_balance(nuevo_saldo_cliente);
+        System.out.println("Su nuevo saldo ahora es: "+cliente.get_balance());
+        String nuevo_balance_cliente = Integer.toString(nuevo_saldo_cliente);
+        banco.manejador_archivo.modificar_archivo(2, cliente.get_id(), nuevo_balance_cliente);
+
     }
 
     //DEPOSITAR DINERO DESDE UNA SUCURSAL VIRTUAL
-    public void depositar_dinero_sucursal(Usuario Cliente){
-        ;
+    public void depositar_dinero_sucursal(Usuario cliente){
+        int cantidad = cantidad_solicitada();
+        int nuevo_saldo_cliente = cliente.get_balance() + cantidad;
+        cliente.update_balance(nuevo_saldo_cliente);
+        System.out.println("Su nuevo saldo ahora es: "+cliente.get_balance());
+        String nuevo_balance_cliente = Integer.toString(nuevo_saldo_cliente);
+        banco.manejador_archivo.modificar_archivo(2, cliente.get_id(), nuevo_balance_cliente);
+
+        //Se lo sumamos a la sucursal virtual
+        banco.balance_banco = banco.balance_banco + cantidad;
     }
 
     //TRANSFERIR DINERO A OTRO CLIENTE

@@ -18,7 +18,7 @@ public class Regular extends Usuario {
 
         BigDecimal nuevo_balance = new BigDecimal(this.get_balance()).subtract(montoRetiro.add(montoComision));//Se le resta el monto + comision al balance
         if(get_balance() <= montoRetiro.add(montoComision).intValue()){
-            throw new SaldoInsuficiente("Oops... estás usando todo tu saldo y no te alcanza para pagar la comisión!");
+            throw new SaldoInsuficiente("Oops... estás usando casi todo tu saldo y no te alcanza para pagar la comisión!");
             
         }else{
             update_balance(nuevo_balance.intValue());    

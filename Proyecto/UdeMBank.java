@@ -128,6 +128,7 @@ class Bank
             System.out.println("3. Depositar desde un ATM");
             System.out.println("4. Depositar dinero via sucursal virtual");
             System.out.println("5. Transferir dinero a otro cliente");
+            System.out.println("6. Salir del programa");
         }
     
         //Ingreso de la opcion del usuario, 1 para retirar dinero
@@ -146,7 +147,7 @@ class Bank
         }
         
     public void menu_administrador(){
-      
+      System.out.println("DINERO TOTAL DEL BANCO: "+balance_banco);
       System.out.println("========================================");
       System.out.println("Bienvenido administrador del banco UdeM");
       System.out.println("Escoja una de las siguientes opciones");
@@ -183,7 +184,6 @@ class Bank
 
     public void opcion_admin(int respuesta){
       if(respuesta == 1){
-        System.out.println("DINERO TOTAL DEL BANCO: "+balance_banco);
         menu_cliente();
         int respuesta_menu_c = input_option();
         opcion_usuario(respuesta_menu_c, 0);
@@ -227,9 +227,12 @@ class Bank
         gestor_finanza.depositar_dinero_atm(cliente);
 
       }else if(respuesta == 4){
-        ;
+        gestor_finanza.depositar_dinero_sucursal(cliente);
       }else if(respuesta == 5){
         gestor_finanza.transferir_dinero(cliente);
+      }else if(respuesta ==6){
+        System.out.println("Gracias por visitar el UdeMBank, vuelve pronto!");
+        System.exit(0);
       }
       menu_cliente();
       int resp = input_option();
