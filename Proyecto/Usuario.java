@@ -11,7 +11,7 @@ public abstract class Usuario
         this.password = password;
 
     }
-    //Añadir Setter
+    
     public int get_id()
     {
         return this.id;
@@ -54,6 +54,6 @@ public abstract class Usuario
         }
     }
 
-  public abstract void withdraw_client(int wd_amount)
+  public abstract int withdraw_client(int wd_amount)throws SaldoInsuficiente
     ;
   }

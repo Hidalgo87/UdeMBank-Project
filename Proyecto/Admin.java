@@ -229,10 +229,11 @@ public class Admin extends Usuario {
         System.out.println("ID: "+id + " - Balance: " + balance);
     }
     @Override
-    public void withdraw_client(int wd_amount){
+    public int withdraw_client(int wd_amount){
         int nuevo_balance = get_balance() - wd_amount;
          update_balance(nuevo_balance);
          System.out.println("Se realizó el retiro con exito!");
          System.out.println("Nuevo saldo: " + this.get_balance());
+         return this.get_balance();
     }
 }

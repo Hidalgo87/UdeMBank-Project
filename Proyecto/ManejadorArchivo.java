@@ -1,6 +1,5 @@
 import java.io.*;
 
-
 public class ManejadorArchivo {
     Bank bank;
     public ManejadorArchivo(Bank banco){
@@ -170,5 +169,33 @@ public class ManejadorArchivo {
                 balance_total_atm += atm_actual.get_balance();
             }
         bank.balance_banco = bank.balance_banco - balance_total_atm;
+    }
+    
+    public void modificar_archivo_atm(int index, int id_actual, String dato) {
+        try {
+            File archivo = new File("lista_atm.txt");
+            File archivo_temp = new File("lista_atm_temp.txt");
+            FileReader fr = new FileReader(archivo);
+            BufferedReader br = new BufferedReader(fr);
+            FileWriter fw = new FileWriter(archivo_temp);
+            BufferedWriter bw = new BufferedWriter(fw);
+            String linea = br.readLine();
+            while (linea != null) {
+                String[] datos = linea.split(" ");
+                if (datos[0].equals(Integer.toString(id_actual))) {
+                    datos[index] = dato;
+                }
+                bw.write(datos[0] + " " + datos[1] + "\n");
+                linea = br.readLine();
+            }
+            fr.close();
+            br.close();
+            bw.close();
+            fw.close();
+            archivo.delete();
+            archivo_temp.renameTo(archivo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -38,12 +38,14 @@ class ATM
         }
     }
 
-    public void withdraw_atm(int wd_amount)
+    public int withdraw_atm(int wd_amount)
     {
         int nuevo_balance;
         nuevo_balance = this.balance - wd_amount;
-        update_balance(nuevo_balance);
+        update_balance(nuevo_balance);//Actualizamos el balance del CAJERO
+        
         System.out.println("Nuevo saldo ATM: " +this.balance);
+        return this.balance;
     }
 }
 

@@ -10,13 +10,14 @@ class Bank
     List<Usuario> client_list = new ArrayList<Usuario>();
     List<ATM> atm_list = new ArrayList<ATM>();
     ManejadorArchivo manejador_archivo = new ManejadorArchivo(this);
-    Admin admin = new Admin(0, 100000, "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9", manejador_archivo);;  
+    Admin admin = new Admin(0, 100000, "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9", manejador_archivo);
     Gestion_Financiera gestor_finanza = new Gestion_Financiera(this);
 
     public Bank()
     {
       manejador_archivo.generar_lista_atm();
       manejador_archivo.generar_lista_usuarios();
+      client_list.add(admin);
     }
     public void Run(){
     int id_ingresada = request_id(); 
@@ -38,22 +39,13 @@ class Bank
     }
     else{
       try {
-        throw new  UsuarioNoEncontradoError("No se encontró un usuario registrado con esas credenciales");
+        throw new UsuarioNoEncontradoError("No se encontró un usuario registrado con esas credenciales");
       } catch (UsuarioNoEncontradoError e) {
         Run(); // volver a solicitar las credenciales
       }
     }
   }
 
-
-    /* 
-    void define_atms()
-    {
-      add_atm(1, 150000);
-      add_atm(2, 30000);
-      add_atm(3, 50000);  
-    }
-    /* */
     void add_atm(int id, int balance)
     {
       ATM atm = new ATM(id, balance);
@@ -128,14 +120,14 @@ class Bank
     }
         //Menu de bienvenida
         public void menu_cliente()
-        {
+        { 
+            System.out.println("==================================================");
             System.out.println("Bienvenido al banco UdeM, aquí están las opciones");
             System.out.println("1. Retirar dinero desde un ATM");
             System.out.println("2. Retirar dinero via sucursal virtual");
             System.out.println("3. Depositar desde un ATM");
             System.out.println("4. Depositar dinero via sucursal virtual");
             System.out.println("5. Transferir dinero a otro cliente");
-            
         }
     
         //Ingreso de la opcion del usuario, 1 para retirar dinero
@@ -154,6 +146,7 @@ class Bank
         }
         
     public void menu_administrador(){
+      
       System.out.println("========================================");
       System.out.println("Bienvenido administrador del banco UdeM");
       System.out.println("Escoja una de las siguientes opciones");
@@ -190,7 +183,10 @@ class Bank
 
     public void opcion_admin(int respuesta){
       if(respuesta == 1){
+        System.out.println("DINERO TOTAL DEL BANCO: "+balance_banco);
         menu_cliente();
+        int respuesta_menu_c = input_option();
+        opcion_usuario(respuesta_menu_c, 0);
       }
       else if(respuesta == 2){
         int id_cliente = request_id();
@@ -208,6 +204,9 @@ class Bank
 
       }else if(respuesta == 5){
         admin.crear_atm();
+      }else if(respuesta == 6){
+        System.out.println("Gracias por visitar el UdeMBank, vuelve pronto!");
+        System.exit(0);
       }
       //imprimir_lista();
       menu_administrador(); //Cuando ejecute alguna opción se le muestra de nuevo las opciones
@@ -217,13 +216,24 @@ class Bank
 
     public void opcion_usuario(int respuesta, int id_usuario){
       Usuario cliente = query_client(id_usuario);
+      //System.out.println("ERES EL USUARIO:"+cliente.get_id() + cliente.getClass().getSimpleName());
       if(respuesta == 1){
         gestor_finanza.retirar_dinero_atm(cliente);
-      }else if(respuesta == 2){
-        gestor_finanza.retirar_dinero_sucursal();
-      }else if(respuesta == 3){
 
+      }else if(respuesta == 2){
+        gestor_finanza.retirar_dinero_sucursal(cliente);
+
+      }else if(respuesta == 3){
+        gestor_finanza.depositar_dinero_atm(cliente);
+
+      }else if(respuesta == 4){
+        ;
+      }else if(respuesta == 5){
+        gestor_finanza.transferir_dinero(cliente);
       }
+      menu_cliente();
+      int resp = input_option();
+      opcion_usuario(resp, id_usuario);
     }
 
     private void imprimir_lista(){

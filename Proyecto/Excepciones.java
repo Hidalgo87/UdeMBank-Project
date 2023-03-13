@@ -1,5 +1,3 @@
-
-
 class ClienteInexistenteError extends Exception {
     // Define el constructor y llama al de la clase madre
     public ClienteInexistenteError() {
@@ -20,6 +18,12 @@ class ClienteInexistenteError extends Exception {
       System.out.println(message);
     }
   }
+  class SaldoInsuficiente extends Exception{
+    public SaldoInsuficiente(String message){
+      super(message);
+      System.out.println(message);
+    }
+  }
 
   class UsuarioNoEncontradoError extends Exception{
     public UsuarioNoEncontradoError(String message){
@@ -33,4 +37,8 @@ class ClienteInexistenteError extends Exception {
       super(message);
       System.out.println(message);
     }
+    
+      // si lo desea, puede agregar métodos adicionales aquí   
   }
+    
+  

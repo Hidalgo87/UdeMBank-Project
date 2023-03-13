@@ -18,7 +18,7 @@ específico.
 ● El administrador es el encargado de gestionar (agregar, eliminar, modificar) a los
 clientes. Cuando se agrega un cliente, el sistema genera automáticamente un
 número de cuenta de 10 dígitos para cada cliente. Estas cuentas son únicas.
-○ Cada que un cliente hace una transacción se actualizan los balances involucrados
+● Cada que un cliente hace una transacción se actualizan los balances involucrados
 (ATM y general del banco). → tener en cuenta el alcance de las variables.
 ● El usuario se deberá identificar usando id y password.
 ● El proceso de validación se hará usando un registro permanente del banco. Este
