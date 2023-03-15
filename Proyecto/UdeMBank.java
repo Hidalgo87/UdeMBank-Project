@@ -9,13 +9,14 @@ class Bank
     int balance_banco = 500000;
     List<Usuario> client_list = new ArrayList<Usuario>();
     List<ATM> atm_list = new ArrayList<ATM>();
-    ManejadorArchivo manejador_archivo = new ManejadorArchivo(this);
-    Admin admin = new Admin(0, 100000, "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9", manejador_archivo);
+    ManejadorArchivoUsuarios manejador_archivo = new ManejadorArchivoUsuarios(this);
+    ManejadorArchivoATM manejadorArchivoATM = new ManejadorArchivoATM(this);
+    Admin admin = new Admin(0, 100000, "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9", this);
     Gestion_Financiera gestor_finanza = new Gestion_Financiera(this);
 
     public Bank()
     {
-      manejador_archivo.generar_lista_atm();
+      manejadorArchivoATM.generar_lista_atm();
       manejador_archivo.generar_lista_usuarios();
       client_list.add(admin);
     }

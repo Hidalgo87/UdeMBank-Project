@@ -35,7 +35,7 @@ public class Gestion_Financiera {
             //System.out.println("DINERO DEL BANCO: "+banco.balance_banco);
             int new_balance_atm = cajero_actual.withdraw_atm(cantidad);
             String nuevo_balance_atm = Integer.toString(new_balance_atm);
-            banco.manejador_archivo.modificar_archivo_atm(1, id_cajero, nuevo_balance_atm);
+            banco.manejadorArchivoATM.modificar_archivo_atm(1, id_cajero, nuevo_balance_atm);
             
 
         }else{
@@ -123,7 +123,7 @@ public class Gestion_Financiera {
         int nuevo_saldo_cajero = cajero.get_balance() + cantidad;
         String nuevo_balance_cajero = Integer.toString(nuevo_saldo_cajero);
         cajero.update_balance(nuevo_saldo_cajero);
-        banco.manejador_archivo.modificar_archivo_atm(1, cajero.get_id(), nuevo_balance_cajero);
+        banco.manejadorArchivoATM.modificar_archivo_atm(1, cajero.get_id(), nuevo_balance_cajero);
         banco.balance_banco = banco.balance_banco + cantidad;
         
         //Actualizamos el balance del cliente tanto del objeto como del txt

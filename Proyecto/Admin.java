@@ -2,11 +2,11 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Admin extends Usuario {
-    ManejadorArchivo manejador_archivo;
+    Bank bank;
     //Encriptacion passwordEncrypter = new Encriptacion();
 
-    public Admin(int id, int balance, String password, ManejadorArchivo ma){ super(id, balance, password);
-        manejador_archivo = ma;
+    public Admin(int id, int balance, String password, Bank banco){ super(id, balance, password);
+        bank = banco;
     }
 
     public void menu_modificacion(Usuario cliente){
@@ -59,21 +59,21 @@ public class Admin extends Usuario {
 
     private void modificar_id_cliente(String new_id, Usuario cliente){
     try{
-        if(!manejador_archivo.bank.id_disponible(Integer.parseInt(new_id))){
+        if(!bank.id_disponible(Integer.parseInt(new_id))){
             throw new IdExistenteError("Ese id no está disponible");
         }
         int new_id_int = Integer.parseInt(new_id);
-        manejador_archivo.modificar_archivo(0, cliente.get_id(), new_id);
+        bank.manejador_archivo.modificar_archivo(0, cliente.get_id(), new_id);
         cliente.set_id(new_id_int);
         System.out.println("ID Actualizado correctamente, ahora es: " + cliente.get_id());
     }catch(NumberFormatException e){
         //Falta añadir para cuando se repiten los ID's
         System.out.println("El valor que ingresó como ID es invalido, intentelo de nuevo");
-        String right_id = String.valueOf(manejador_archivo.bank.request_id());
+        String right_id = String.valueOf((bank.request_id()));
         modificar_id_cliente(right_id, cliente);
         }
         catch (IdExistenteError e){
-        String right_id = String.valueOf(manejador_archivo.bank.request_id());
+        String right_id = String.valueOf(bank.request_id());
         modificar_id_cliente(right_id, cliente);  
         }
     }
@@ -82,7 +82,7 @@ public class Admin extends Usuario {
         
         String new_password_encrypted = PasswordEncrypter.encrypt(new_password);
         cliente.set_password(new_password_encrypted);
-        manejador_archivo.modificar_archivo(1, cliente.get_id(), new_password_encrypted);
+        bank.manejador_archivo.modificar_archivo(1, cliente.get_id(), new_password_encrypted);
         //manejador_archivo.generar_lista_usuarios();
         System.out.println("La nueva contraseña ahora es "+new_password);
         //Excepcion por si la contraseña es igual
@@ -90,7 +90,7 @@ public class Admin extends Usuario {
 
     private void modificar_balance_cliente(String new_balance, Usuario cliente){
         try{
-            manejador_archivo.modificar_archivo(2, cliente.get_id(), new_balance);
+            bank.manejador_archivo.modificar_archivo(2, cliente.get_id(), new_balance);
             int new_balance_int = Integer.parseInt(new_balance);
             cliente.set_balance(new_balance_int);
             System.out.println("Balance actualizado correctamente, ahora es: " + cliente.get_balance());
@@ -107,28 +107,28 @@ public class Admin extends Usuario {
     private Usuario modificar_tipo_cliente(String new_type, Usuario cliente){// todo: FALTA ACTUALIZAR LA LISTA (con index obtenido se elimina el pasado y se usa add_client)
     if(new_type.equals("regular")){
         //Intentar cambiar su tipo con ayuda del txt, no del objeto
-        manejador_archivo.modificar_archivo(3, cliente.get_id(), new_type);
+        bank.manejador_archivo.modificar_archivo(3, cliente.get_id(), new_type);
         int old_id = cliente.get_id();
         int old_balance = cliente.get_balance();
         String old_password = cliente.get_password();
         //cliente = null; //Referencia de memoria vacia, el garbage collector lo borrá
-        cliente = manejador_archivo.bank.query_client(old_id);
+        cliente = bank.manejador_archivo.bank.query_client(old_id);
         Regular new_client = new Regular(old_id, old_balance, old_password);
-        manejador_archivo.generar_lista_usuarios();
-        System.out.println("lista despues de cambiar el tipo; "+ manejador_archivo.bank.client_list);
+        bank.manejador_archivo.generar_lista_usuarios();
+        System.out.println("lista despues de cambiar el tipo; "+ bank.manejador_archivo.bank.client_list);
         System.out.println("El tipo del cliente ahora es "+ new_client.getClass().getSimpleName());
 
         return new_client;
     }
     if(new_type.equals("platino")){
-        manejador_archivo.modificar_archivo(3, cliente.get_id(), new_type);
+        bank.manejador_archivo.modificar_archivo(3, cliente.get_id(), new_type);
         int old_id = cliente.get_id();
         int old_balance = cliente.get_balance();
         String old_password = cliente.get_password();
-        cliente = manejador_archivo.bank.query_client(old_id);
+        cliente = bank.manejador_archivo.bank.query_client(old_id);
         Platino new_client = new Platino(old_id, old_balance, old_password);
         //cliente = null; //Referencia de memoria vacia, el garbage collector lo borrá
-        manejador_archivo.generar_lista_usuarios();
+        bank.manejador_archivo.generar_lista_usuarios();
         System.out.println("El tipo del cliente ahora es "+ new_client.getClass().getSimpleName());
         return new_client;
     }
@@ -143,7 +143,7 @@ public class Admin extends Usuario {
                 System.out.println("Ingrese el ID del nuevo cliente");
                 try{
                     id = Integer.parseInt(input.nextLine());
-                    if(manejador_archivo.bank.id_disponible(id) && id !=0){
+                    if(bank.id_disponible(id) && id !=0){
                         break;
                     }
                     else{
@@ -185,28 +185,28 @@ public class Admin extends Usuario {
             System.out.println("Ha creado un nuevo cliente con los siguientes datos");
             System.out.println("ID: "+id + " - Balance: " + balance + " - Contraseña: " + original_password+ " - Tipo: " + type);
             System.out.println("Ingresando nuevamente al menú...");
-            manejador_archivo.bank.add_client(id, balance, password, type);
-            manejador_archivo.escribir_nuevo_usuario(id,password, balance, type);
+            bank.add_client(id, balance, password, type);
+            bank.manejador_archivo.escribir_nuevo_usuario(id,password, balance, type);
             
         }
     
     public void eliminar_cliente(int id, Usuario cliente){
         
-        manejador_archivo.bank.client_list.remove(cliente);
-        manejador_archivo.eliminar_cliente_archivo(id);
-        System.out.println("nueva lista de clientes ahora está asi "+manejador_archivo.bank.client_list );
+        bank.client_list.remove(cliente);
+        bank.manejador_archivo.eliminar_cliente_archivo(id);
+        System.out.println("nueva lista de clientes ahora está asi "+ bank.client_list );
 
     }
     public void crear_atm(){
-        manejador_archivo.bank.imprimir_lista_atm();
-        System.out.println("El balance actual del banco es: "+ manejador_archivo.bank.balance_banco+"$");
+        bank.manejador_archivo.bank.imprimir_lista_atm();
+        System.out.println("El balance actual del banco es: "+ bank.manejador_archivo.bank.balance_banco+"$");
         Scanner datos = new Scanner(System.in);
         int id = 0;
         while (true) {
             System.out.println("Ingrese el ID del nuevo ATM");
             try{
                 id = Integer.parseInt(datos.nextLine());
-                if(manejador_archivo.bank.id_disponible_atm(id)){
+                if(bank.id_disponible_atm(id)){
                     break;
                 }
                 else{
@@ -222,7 +222,7 @@ public class Admin extends Usuario {
             System.out.println("Ingrese el balance del nuevo ATM");
             try{
                 balance = Integer.parseInt(datos.nextLine());
-                if(manejador_archivo.bank.balance_disponible(balance)){
+                if(bank.balance_disponible(balance)){
                     break;
                 }else{
                     System.out.println("El balance que ingreśo para el cajero es muy alto, el banco no tiene suficiente dinero");
@@ -232,8 +232,8 @@ public class Admin extends Usuario {
                 System.out.println("El valor que ingresó como balance es invalido, intentelo de nuevo");
             }
         }
-        manejador_archivo.bank.add_atm(id, balance);
-        manejador_archivo.escribir_nuevo_amt(id, balance);
+        bank.add_atm(id, balance);
+        bank.manejadorArchivoATM.escribir_nuevo_amt(id, balance);
         System.out.println("Ha creado un nuevo ATM con los siguientes datos");
         System.out.println("ID: "+id + " - Balance: " + balance);
     }
