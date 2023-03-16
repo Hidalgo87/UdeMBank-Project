@@ -1,6 +1,6 @@
 import java.math.BigDecimal;
 public class Platino extends Usuario{
-    private BigDecimal comision = new BigDecimal("0.015"); //Comision del 0.5%
+    private BigDecimal comision = new BigDecimal("0.005"); //Comision del 0.5%
 
     public Platino(int id, int balance, String password){ super(id, balance, password);
     }
@@ -12,7 +12,6 @@ public class Platino extends Usuario{
     public int withdraw_client(int wd_amount)throws SaldoInsuficiente{
         BigDecimal montoRetiro = new BigDecimal(wd_amount);
         BigDecimal montoComision = montoRetiro.multiply(comision);//El valor de la comision se multiplica con el monto, con el metodo Multiply
-
         BigDecimal nuevo_balance = new BigDecimal(this.get_balance()).subtract(montoRetiro.add(montoComision));//Se le resta el monto + comision al balance
         if(get_balance() <= montoRetiro.add(montoComision).intValue()){
             throw new SaldoInsuficiente("Oops... estás usando casi todo tu saldo y no te alcanza para pagar la comisión!");

@@ -53,7 +53,6 @@ class Bank
       atm_list.add(atm);
     }
 
-    
     void add_client(int id, int balance, String password, String client_type)
     {
       Usuario client = null;
@@ -132,7 +131,6 @@ class Bank
             System.out.println("6. Salir del programa");
         }
     
-        //Ingreso de la opcion del usuario, 1 para retirar dinero
         public int input_option()
         {
          try {
@@ -195,7 +193,7 @@ class Bank
         admin.menu_modificacion(cliente);
 
       }else if(respuesta == 3){
-        admin.solicitar_datos_ncliente();
+        admin.solicitar_datos_nuevo_cliente();
 
       }else if(respuesta == 4){
         System.out.println("Lista actual antes "+client_list);
@@ -208,8 +206,9 @@ class Bank
       }else if(respuesta == 6){
         System.out.println("Gracias por visitar el UdeMBank, vuelve pronto!");
         System.exit(0);
+      }else{
+        System.out.println("Por favor elija sólo una de las opciones mostradas");
       }
-      //imprimir_lista();
       menu_administrador(); //Cuando ejecute alguna opción se le muestra de nuevo las opciones
       int resp = input_option();
       opcion_admin(resp);
@@ -217,7 +216,6 @@ class Bank
 
     public void opcion_usuario(int respuesta, int id_usuario){
       Usuario cliente = query_client(id_usuario);
-      //System.out.println("ERES EL USUARIO:"+cliente.get_id() + cliente.getClass().getSimpleName());
       if(respuesta == 1){
         gestor_finanza.retirar_dinero_atm(cliente);
 
@@ -234,13 +232,15 @@ class Bank
       }else if(respuesta ==6){
         System.out.println("Gracias por visitar el UdeMBank, vuelve pronto!");
         System.exit(0);
+      }else{
+        System.out.println("Por favor elija sólo una de las opciones mostradas");
       }
       menu_cliente();
       int resp = input_option();
       opcion_usuario(resp, id_usuario);
     }
 
-    private void imprimir_lista(){
+    public void imprimir_lista(){
       System.out.println("Lista de clientes");
       for (Usuario cliente_i : client_list) {
         System.out.println(cliente_i);
@@ -255,111 +255,12 @@ class Bank
     }
       
     boolean verify_client(int client_id) {
-      for (Usuario cliente_evaluado : client_list) { //cilo Para cada objeto de tipo cliente en la lista de clientes
-        int cliente_evaluado_id = cliente_evaluado.get_id(); //guardamos el ID del cliente en la variable cliente_evaluado_id
-        if (client_id == cliente_evaluado_id) {//Si la id que ingresó el cliente es igual a la ID que se encuentra en la lista de clientes, retorna true
+      for (Usuario cliente_evaluado : client_list) { 
+        int cliente_evaluado_id = cliente_evaluado.get_id(); 
+        if (client_id == cliente_evaluado_id) {
           return true;
         }
       }
       return false;
     }
 }
-    /* 
-    //Metodo para verificar que el id ingresador por el cliente se encuentre en la lista de clientes
-    boolean verify_client(int client_id) {
-      for (Client cliente_evaluado : client_list) { //cilo Para cada objeto de tipo cliente en la lista de clientes
-        int cliente_evaluado_id = cliente_evaluado.get_id(); //guardamos el ID del cliente en la variable cliente_evaluado_id
-        if (client_id == cliente_evaluado_id) {//Si la id que ingresó el cliente es igual a la ID que se encuentra en la lista de clientes, retorna true
-          return true;
-        }
-      }
-      return false;
-    }
-
-    ATM query_atm(int id_atm) {
-      for (ATM ATM_evaluado : atm_list) { //Realizamos el mismo proceso para verificar que un ATM se encuentre registrado
-        if (ATM_evaluado.get_id() == id_atm) {
-          return ATM_evaluado;
-        }
-      }
-      return null;
-    }
-    //Metodo para verificar que el balance del ATM sea mayor o igual a la solicitada por el usuario
-    Boolean verify_atm_balance(int id_atm, int cantidad)
-    {
-        ATM atm = query_atm(id_atm); //Variable de tipo ATM
-        if (atm.get_balance() <= cantidad)
-        {
-            System.out.println("No hay suficiente dinero en el cajero");
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-    //Metodo para verificar que el cliente exista y 
-    public void retirar_dinero(int id)
-    {
-        try
-        {
-            if (verify_client(id))
-            {
-              int amount = request_amount();
-              Client cliente = query_client(id);
-              if(cliente.check_balance_client(amount))
-              {
-                if (atm_list.get(0).check_balance_atm(amount)) //Las listas no tienen la propiedad de indice accesible por '[]', por lo tanto se llama al metodo get() y su indice
-                {
-                  atm_list.get(0).withdraw_atm(amount);
-                  cliente.withdraw_client(amount);
-                }
-                else
-                {
-                  //ERROR NO HAY DINERO EN CAJERO
-                  System.out.println("No hay suficiente dinero en el cajero. Intente de nuevo con menos cantidad");
-                  retirar_dinero(id);
-                }
-              }
-              else
-              {
-                System.out.println("No tienes el suficiente dinero. Intenta con menos");
-                retirar_dinero(id);
-              }
-            }
-            else
-            {
-                //ERROR cliente no existe 
-                throw new ClienteInexistenteError("No se encontró el cliente");
-            }
-        }
-        catch (ClienteInexistenteError e)
-        {
-            System.out.println("Por favor Ingrese un ID válido");
-            retirar_dinero(id);
-        }
-    }
-
-
-    
-
-    public void saldo_cliente(int id){
-      Client cliente = query_client(id);
-      System.out.println("Bienvenido persona con id " +id + " Tu saldo actual es "+ cliente.get_balance());
-    }
-    public void saldo_atm(){
-      ATM current_atm = atm_list.get(0);
-      System.out.println("El saldo actual del cajero es "+ current_atm.get_balance());
-    }
-
-    
-    int request_amount()
-    {
-        Scanner input_amount = new Scanner(System.in);
-        System.out.println("Ingrese la cantidad de dinero que desea retirar: ");
-        int cantidad = input_amount.nextInt();
-        //input_amount.close();
-        return cantidad; //Cantidad que requiere retirar el usuario
-    }
-}
-/* */

@@ -135,7 +135,7 @@ public class Admin extends Usuario {
     return null;
     }
 
-    public void solicitar_datos_ncliente(){
+    public void solicitar_datos_nuevo_cliente(){
         //Primero pedimos los datos del nuevo cliente
             Scanner input = new Scanner(System.in);
             int id = 0;
@@ -147,10 +147,13 @@ public class Admin extends Usuario {
                         break;
                     }
                     else{
-                        System.out.println("El ID que ingresó ya existe, vuelva a intentarlo");//OJO: NO ESTOY APLICANDO LA EXCEPCION
+                        throw new IdExistenteError("El ID que ingresó ya existe");
                     }
                 }catch(NumberFormatException e){
                     System.out.println("El valor que ingresó como ID es invalido, intentelo de nuevo");
+                }
+                catch(IdExistenteError e){
+                    System.out.println("Por favor, inténtelo con un ID que no esté tomado");;
                 }
             }
         
@@ -184,7 +187,6 @@ public class Admin extends Usuario {
 
             System.out.println("Ha creado un nuevo cliente con los siguientes datos");
             System.out.println("ID: "+id + " - Balance: " + balance + " - Contraseña: " + original_password+ " - Tipo: " + type);
-            System.out.println("Ingresando nuevamente al menú...");
             bank.add_client(id, balance, password, type);
             bank.manejador_archivo.escribir_nuevo_usuario(id,password, balance, type);
             
@@ -198,8 +200,8 @@ public class Admin extends Usuario {
 
     }
     public void crear_atm(){
-        bank.manejador_archivo.bank.imprimir_lista_atm();
-        System.out.println("El balance actual del banco es: "+ bank.manejador_archivo.bank.balance_banco+"$");
+        bank.imprimir_lista_atm();
+        System.out.println("El balance actual del banco es: "+ bank.balance_banco+"$");
         Scanner datos = new Scanner(System.in);
         int id = 0;
         while (true) {
@@ -239,6 +241,7 @@ public class Admin extends Usuario {
     }
     @Override
     public int withdraw_client(int wd_amount){
+        //SE HACE SIN APLICAR COMISIÓN
         int nuevo_balance = get_balance() - wd_amount;
          update_balance(nuevo_balance);
          System.out.println("Se realizó el retiro con exito!");

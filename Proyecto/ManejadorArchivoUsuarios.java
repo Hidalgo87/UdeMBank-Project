@@ -8,7 +8,8 @@ public class ManejadorArchivoUsuarios {
     public Boolean verificar_password(int id, String password)
     {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("informacion.txt"));          
+            String archivo = "informacion.txt";
+            BufferedReader br = new BufferedReader(new FileReader(archivo));          
             String content = br.readLine();
             Boolean bool = false;
             while (content != null)
@@ -34,14 +35,14 @@ public class ManejadorArchivoUsuarios {
     public void escribir_nuevo_usuario(int id, String password, int balance, String type)
     {
         try{
-        BufferedWriter bw = new BufferedWriter(new FileWriter("informacion.txt", true)); // el true es para saber si tiene que agregar info O eliminar y sobreescribir
+        String archivo = "informacion.txt";
+        BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true)); // el true es para saber si tiene que agregar info O eliminar y sobreescribir
         String cadena = String.format("%d %s %d %s",id, password, balance, type);
         bw.append(cadena + "\n");
         bw.flush();
         bw.close();
         }
         catch (IOException e){
-            System.out.println("PRUEBA");
             e.printStackTrace();
         }
     }
@@ -49,7 +50,8 @@ public class ManejadorArchivoUsuarios {
     public void generar_lista_usuarios()
     {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("informacion.txt"));          
+            String archivo = "informacion.txt";
+            BufferedReader br = new BufferedReader(new FileReader(archivo));          
             String content = br.readLine();
             bank.client_list.clear();
             while (content != null)
@@ -72,10 +74,8 @@ public class ManejadorArchivoUsuarios {
         try {
             File archivo = new File("informacion.txt");
             File archivo_temp = new File("informacion_temp.txt");
-            FileReader fr = new FileReader(archivo);
-            BufferedReader br = new BufferedReader(fr);
-            FileWriter fw = new FileWriter(archivo_temp);
-            BufferedWriter bw = new BufferedWriter(fw);
+            BufferedReader br = new BufferedReader(new FileReader(archivo));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(archivo_temp));
             String linea = br.readLine();
             while (linea != null) {
                 String[] datos = linea.split(" ");
@@ -85,10 +85,8 @@ public class ManejadorArchivoUsuarios {
                 bw.write(datos[0] + " " + datos[1] + " " + datos[2] + " " + datos[3] + "\n");
                 linea = br.readLine();
             }
-            fr.close();
             br.close();
             bw.close();
-            fw.close();
             archivo.delete();
             archivo_temp.renameTo(archivo);
         } catch (IOException e) {
@@ -101,10 +99,8 @@ public class ManejadorArchivoUsuarios {
         try {
             File archivo = new File("informacion.txt");
             File archivo_temp = new File("informacion_temp.txt");
-            FileReader fr = new FileReader(archivo);
-            BufferedReader br = new BufferedReader(fr);
-            FileWriter fw = new FileWriter(archivo_temp);
-            BufferedWriter bw = new BufferedWriter(fw);
+            BufferedReader br = new BufferedReader(new FileReader(archivo));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(archivo_temp));
             String linea = br.readLine();
             while (linea != null) {
                 String[] datos = linea.split(" ");
@@ -116,10 +112,8 @@ public class ManejadorArchivoUsuarios {
                 }
                 linea = br.readLine();
             }
-            fr.close();
             br.close();
             bw.close();
-            fw.close();
             archivo.delete();
             archivo_temp.renameTo(archivo);
         } catch (IOException e) {

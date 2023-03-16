@@ -36,22 +36,9 @@ public abstract class Usuario
         this.password = new_password;
         return this.password;
     }
-
     void update_balance(int new_balance)
     {
       this.balance = new_balance;
-    }
-
-    public Boolean check_balance_client(int dinero_pedido)
-    {
-        if (this.balance < dinero_pedido)
-        {
-            return false;
-        }
-        else
-        {
-          return true;
-        }
     }
 
   public abstract int withdraw_client(int wd_amount)throws SaldoInsuficiente

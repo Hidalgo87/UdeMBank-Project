@@ -25,6 +25,7 @@ public class ManejadorArchivoATM {
         try {
             BufferedReader br = new BufferedReader(new FileReader("lista_atm.txt"));          
             String content = br.readLine();
+            //Ignoramos la primera linea
             content = br.readLine();
             bank.atm_list.clear();
             while (content != null)
@@ -53,10 +54,8 @@ public class ManejadorArchivoATM {
         try {
             File archivo = new File("lista_atm.txt");
             File archivo_temp = new File("lista_atm_temp.txt");
-            FileReader fr = new FileReader(archivo);
-            BufferedReader br = new BufferedReader(fr);
-            FileWriter fw = new FileWriter(archivo_temp);
-            BufferedWriter bw = new BufferedWriter(fw);
+            BufferedReader br = new BufferedReader(new FileReader(archivo));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(archivo_temp));
             String linea = br.readLine();
             while (linea != null) {
                 String[] datos = linea.split(" ");
@@ -66,10 +65,8 @@ public class ManejadorArchivoATM {
                 bw.write(datos[0] + " " + datos[1] + "\n");
                 linea = br.readLine();
             }
-            fr.close();
             br.close();
             bw.close();
-            fw.close();
             archivo.delete();
             archivo_temp.renameTo(archivo);
         } catch (IOException e) {
