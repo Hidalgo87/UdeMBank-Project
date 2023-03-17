@@ -12,7 +12,7 @@ public class Regular extends Usuario {
     }
 
     @Override
-    public int withdraw_client(int wd_amount)throws SaldoInsuficiente{
+    public int withdraw_balance(int wd_amount)throws SaldoInsuficiente{
         BigDecimal montoRetiro = new BigDecimal(wd_amount);
         BigDecimal montoComision = montoRetiro.multiply(comision);//El valor de la comision se multiplica con el monto, con el metodo Multiply
 

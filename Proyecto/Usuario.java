@@ -41,6 +41,6 @@ public abstract class Usuario
       this.balance = new_balance;
     }
 
-  public abstract int withdraw_client(int wd_amount)throws SaldoInsuficiente
+  public abstract int withdraw_balance(int wd_amount)throws SaldoInsuficiente
     ;
   }

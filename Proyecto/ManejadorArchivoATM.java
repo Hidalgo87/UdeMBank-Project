@@ -27,7 +27,7 @@ public class ManejadorArchivoATM {
             String content = br.readLine();
             //Ignoramos la primera linea
             content = br.readLine();
-            bank.atm_list.clear();
+            bank.atm_list.clear();//Con el objetivo de que no se duplique la lista si se hace mas de dos veces
             while (content != null)
             {
                 String[] datos = content.split(" ");

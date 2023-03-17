@@ -9,7 +9,7 @@ public class Platino extends Usuario{
         return this.comision;
     }
     @Override
-    public int withdraw_client(int wd_amount)throws SaldoInsuficiente{
+    public int withdraw_balance(int wd_amount)throws SaldoInsuficiente{
         BigDecimal montoRetiro = new BigDecimal(wd_amount);
         BigDecimal montoComision = montoRetiro.multiply(comision);//El valor de la comision se multiplica con el monto, con el metodo Multiply
         BigDecimal nuevo_balance = new BigDecimal(this.get_balance()).subtract(montoRetiro.add(montoComision));//Se le resta el monto + comision al balance

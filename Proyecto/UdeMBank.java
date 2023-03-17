@@ -111,6 +111,20 @@ class Bank
       }
     }
   
+    public int input_option()
+        {
+         try {
+          Scanner opcion_menu = new Scanner(System.in);
+            int respuesta = opcion_menu.nextInt();
+            return respuesta;
+         }
+         catch (InputMismatchException e)
+         {
+          System.out.println("Ingrese solo numeros");
+          return input_option();
+         }
+        }
+
   public String request_password()
     {
         Scanner input_password = new Scanner(System.in);
@@ -131,20 +145,6 @@ class Bank
             System.out.println("6. Salir del programa");
         }
     
-        public int input_option()
-        {
-         try {
-          Scanner opcion_menu = new Scanner(System.in);
-            int respuesta = opcion_menu.nextInt();
-            return respuesta;
-         }
-         catch (InputMismatchException e)
-         {
-          System.out.println("Ingrese solo numeros");
-          return input_option();
-         }
-        }
-        
     public void menu_administrador(){
       System.out.println("DINERO TOTAL DEL BANCO: "+balance_banco);
       System.out.println("========================================");

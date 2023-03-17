@@ -89,6 +89,7 @@ public class Admin extends Usuario {
    }
 
     private void modificar_balance_cliente(String new_balance, Usuario cliente){
+        
         try{
             bank.manejador_archivo.modificar_archivo(2, cliente.get_id(), new_balance);
             int new_balance_int = Integer.parseInt(new_balance);
@@ -108,35 +109,24 @@ public class Admin extends Usuario {
     if(new_type.equals("regular")){
         //Intentar cambiar su tipo con ayuda del txt, no del objeto
         bank.manejador_archivo.modificar_archivo(3, cliente.get_id(), new_type);
-        int old_id = cliente.get_id();
-        int old_balance = cliente.get_balance();
-        String old_password = cliente.get_password();
-        //cliente = null; //Referencia de memoria vacia, el garbage collector lo borrá
-        cliente = bank.manejador_archivo.bank.query_client(old_id);
-        Regular new_client = new Regular(old_id, old_balance, old_password);
         bank.manejador_archivo.generar_lista_usuarios();
-        System.out.println("lista despues de cambiar el tipo; "+ bank.manejador_archivo.bank.client_list);
-        System.out.println("El tipo del cliente ahora es "+ new_client.getClass().getSimpleName());
+        System.out.println("lista despues de cambiar el tipo; "+ bank.client_list);
+        System.out.println("El tipo del cliente ahora es "+ cliente.getClass().getSimpleName());
 
-        return new_client;
+        //return new_client;
     }
     if(new_type.equals("platino")){
         bank.manejador_archivo.modificar_archivo(3, cliente.get_id(), new_type);
-        int old_id = cliente.get_id();
-        int old_balance = cliente.get_balance();
-        String old_password = cliente.get_password();
-        cliente = bank.manejador_archivo.bank.query_client(old_id);
-        Platino new_client = new Platino(old_id, old_balance, old_password);
-        //cliente = null; //Referencia de memoria vacia, el garbage collector lo borrá
         bank.manejador_archivo.generar_lista_usuarios();
-        System.out.println("El tipo del cliente ahora es "+ new_client.getClass().getSimpleName());
-        return new_client;
+        System.out.println("El tipo del cliente ahora es "+ cliente.getClass().getSimpleName());
+        
     }
     return null;
     }
 
     public void solicitar_datos_nuevo_cliente(){
         //Primero pedimos los datos del nuevo cliente
+        System.out.println("LISTA DE CLIENTES: "+bank.client_list);
             Scanner input = new Scanner(System.in);
             int id = 0;
             while (true) {
@@ -193,11 +183,9 @@ public class Admin extends Usuario {
         }
     
     public void eliminar_cliente(int id, Usuario cliente){
-        
         bank.client_list.remove(cliente);
         bank.manejador_archivo.eliminar_cliente_archivo(id);
         System.out.println("nueva lista de clientes ahora está asi "+ bank.client_list );
-
     }
     public void crear_atm(){
         bank.imprimir_lista_atm();
@@ -240,7 +228,7 @@ public class Admin extends Usuario {
         System.out.println("ID: "+id + " - Balance: " + balance);
     }
     @Override
-    public int withdraw_client(int wd_amount){
+    public int withdraw_balance(int wd_amount){
         //SE HACE SIN APLICAR COMISIÓN
         int nuevo_balance = get_balance() - wd_amount;
          update_balance(nuevo_balance);
