@@ -21,7 +21,7 @@ public class Gestion_Financiera {
 
             //Proceso de resta de saldos
             try{
-            int new_balance = cliente.withdraw_client(cantidad); //Le restamos el monto + comision al usuario y retornamos el neuvo balance
+            int new_balance = cliente.withdraw_balance(cantidad); //Le restamos el monto + comision al usuario y retornamos el neuvo balance
             String nuevo_balance = Integer.toString(new_balance);//Lo convertimos a String porque el metodo de abajo lo debe recibir asi
             //Ahora actualizamos el balance del cliente en el archivo TXT
             banco.manejador_archivo.modificar_archivo(2, cliente.get_id(), nuevo_balance);
@@ -92,7 +92,7 @@ public class Gestion_Financiera {
         int cantidad = cantidad_solicitada();
         if(cliente.get_balance() >= cantidad){
         try{
-            int new_balance = cliente.withdraw_client(cantidad); 
+            int new_balance = cliente.withdraw_balance(cantidad); 
             String nuevo_balance = Integer.toString(new_balance);
             banco.manejador_archivo.modificar_archivo(2, cliente.get_id(), nuevo_balance);
             }catch(SaldoInsuficiente e){
@@ -121,8 +121,8 @@ public class Gestion_Financiera {
         //Añadimos el deposito hecho por el cliente, a el cajero
         ATM cajero = banco.query_atm(id_cajero);
         int nuevo_saldo_cajero = cajero.get_balance() + cantidad;
-        String nuevo_balance_cajero = Integer.toString(nuevo_saldo_cajero);
         cajero.update_balance(nuevo_saldo_cajero);
+        String nuevo_balance_cajero = Integer.toString(nuevo_saldo_cajero);
         banco.manejadorArchivoATM.modificar_archivo_atm(1, cajero.get_id(), nuevo_balance_cajero);
         banco.balance_banco = banco.balance_banco + cantidad;
         
@@ -159,7 +159,7 @@ public class Gestion_Financiera {
 
         //Ahora le quitamos el dinero que envió al cliente que hizo la transferencia
         try{
-            int new_balance = cliente.withdraw_client(cantidad); 
+            int new_balance = cliente.withdraw_balance(cantidad); 
             String nuevo_balance_cliente = Integer.toString(new_balance);
             banco.manejador_archivo.modificar_archivo(2, cliente.get_id(), nuevo_balance_cliente);
             }catch(SaldoInsuficiente e){
